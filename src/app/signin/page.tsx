@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 
-import { UserContext } from "../layout";
+import { UserContext, UtilsContext } from "../layout";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import BackButton from "../../../components/BackButton/page";
 
 export default function SignIn() {
 
     const userContext = useContext(UserContext);
+    const utilsContext = useContext(UtilsContext);
 
     const router = useRouter();
 
@@ -99,12 +101,29 @@ export default function SignIn() {
                         divError.classList.remove("active");
                     }, 3000);
                 }
+
+                else if (responseData.error.startsWith("Invalid character")) {
+
+                    document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                    divErrorPelement.textContent = "Algunos caracteres no están permitidos.";
+                    divError.classList.add("active");
+
+                    setTimeout(() => {
+                        divError.classList.remove("active");
+                    }, 3000);
+                }
             }
         }
     };
 
+    useEffect(() => {
+        utilsContext.setBackButton(window.location.pathname);
+    }, []);
+
     return (
         <main className="main">
+
+                <BackButton pathname={utilsContext.backButton}/>
 
                 <div className="error--div error--div--signin">
                     <p className="error--div--p">

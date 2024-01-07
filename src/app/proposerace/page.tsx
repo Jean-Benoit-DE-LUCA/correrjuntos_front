@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, Fragment } from "react";
-import { UserContext } from "../layout";
+import { UserContext, UtilsContext } from "../layout";
+import BackButton from "../../../components/BackButton/page";
 
 export default function ProposeRace() {
 
     const router = useRouter();
 
     const userContext = useContext(UserContext);
+    const utilsContext = useContext(UtilsContext);
 
     const handleSubmitProposeRace = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,8 +25,13 @@ export default function ProposeRace() {
 
         const inputRaceTime = (document.getElementsByClassName("main--div--register--form--input--racetime")[0] as HTMLInputElement);
 
+        const selectLevel = (document.getElementsByClassName("main--div--register--form--input--race--level")[0] as HTMLSelectElement);
+
         const inputCheckBoxNoLimit = (document.getElementsByClassName("main--form--findrunners--undefined--checkbox")[0] as HTMLInputElement);
         const inputMaxUsers = (document.getElementsByClassName("main--div--register--form--input--hour--start maximum--users")[0] as HTMLInputElement);
+
+        const inputOnlyMale = (document.getElementsByClassName("main--div--register--form--input--male")[0] as HTMLInputElement);
+        const inputOnlyFemale = (document.getElementsByClassName("main--div--register--form--input--female")[0] as HTMLInputElement);
 
         const divError = (document.getElementsByClassName("error--div")[0] as HTMLDivElement);
         const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
@@ -40,6 +47,54 @@ export default function ProposeRace() {
         {
             document.documentElement.style.setProperty('--divErrorColor', '#ff0000');
             divErrorPelement.textContent = "Por favor, complete todos los campos";
+            divError.classList.add("active");
+
+            setTimeout(() => {
+                divError.classList.remove("active");
+            }, 3000);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        else if (inputOnlyMale.checked && inputOnlyFemale.checked) {
+
+            document.documentElement.style.setProperty('--divErrorColor', '#ff0000');
+            divErrorPelement.textContent = "No se puede seleccionar \"Solo chichos\" o \"Solo chicas\" a la vez";
+            divError.classList.add("active");
+
+            setTimeout(() => {
+                divError.classList.remove("active");
+            }, 3000);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        else if (userContext.getUserData.gender == "male" && inputOnlyFemale.checked) {
+
+            document.documentElement.style.setProperty('--divErrorColor', '#ff0000');
+            divErrorPelement.textContent = "No se puede seleccionar \"Solo chicas\" siendo un chico";
+            divError.classList.add("active");
+
+            setTimeout(() => {
+                divError.classList.remove("active");
+            }, 3000);
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        else if (userContext.getUserData.gender == "female" && inputOnlyMale.checked) {
+
+            document.documentElement.style.setProperty('--divErrorColor', '#ff0000');
+            divErrorPelement.textContent = "No se puede seleccionar \"Solo chicos\" siendo una chica";
             divError.classList.add("active");
 
             setTimeout(() => {
@@ -68,8 +123,11 @@ export default function ProposeRace() {
                     inputDate: inputDate.value,
                     selectHour: selectHour.value,
                     inputRaceTime: inputRaceTime.value,
+                    selectLevel: selectLevel.value,
                     inputCheckBoxNoLimit: inputCheckBoxNoLimit.checked,
                     inputMaxUsers: inputMaxUsers.value,
+                    inputOnlyMale: inputOnlyMale.checked,
+                    inputOnlyFemale: inputOnlyFemale.checked,
                     userMail: userContext.getUserData.email,
                     userId: userContext.getUserData.id
                 })
@@ -78,22 +136,42 @@ export default function ProposeRace() {
             const responseData = await response.json();
             console.log(responseData);
             
-            /*if (responseData.bodyResponse) {
+            if (responseData.hasOwnProperty("bodyResponse")) {
 
-                document.documentElement.style.setProperty("--divErrorColor", "#0eab2a");
-                divErrorPelement.textContent = "Carrera registrada con éxito";
-                divError.classList.add("active");
+                if (responseData.bodyResponse) {
 
-                setTimeout(() => {
-                    divError.classList.remove("active");
-                    router.push("/");
-                }, 3000);
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
-            }*/
+                    document.documentElement.style.setProperty("--divErrorColor", "#0eab2a");
+                    divErrorPelement.textContent = "Carrera registrada con éxito";
+                    divError.classList.add("active");
+
+                    setTimeout(() => {
+                        divError.classList.remove("active");
+                        router.push("/");
+                    }, 2000);
+                }
+
+                else if (!responseData.bodyResponse) {
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                    document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                    divErrorPelement.textContent = "Por favor, vuelva a autenticarse.";
+                    divError.classList.add("active");
+
+                    setTimeout(() => {
+                        divError.classList.remove("active");
+                        router.push("/signin");
+                    }, 2000);
+                }
+            }
         }
 
         
@@ -104,11 +182,13 @@ export default function ProposeRace() {
 
         const inputMaxUsers = (document.getElementsByClassName("main--div--register--form--input--hour--start maximum--users")[0] as HTMLInputElement);
 
-        e.currentTarget.checked ? inputMaxUsers.classList.add("active") : inputMaxUsers.classList.remove("active");
+        e.currentTarget.checked ? (inputMaxUsers.classList.add("active"), inputMaxUsers.value = "") : inputMaxUsers.classList.remove("active");
     };
 
     useEffect(() => {
-        console.log(userContext);
+
+        utilsContext.setBackButton(window.location.pathname);
+
         if (userContext.getUserData.email.length == 0) {
             userContext.setMessage("Debes autenticarte para proponer una carrera.");
             router.push("/");
@@ -117,6 +197,8 @@ export default function ProposeRace() {
 
     return (
         <main className="main">
+
+            <BackButton pathname={utilsContext.backButton}/>
 
             <div className="error--div error--div--proposerace">
                 <p className="error--div--p">
@@ -184,10 +266,10 @@ export default function ProposeRace() {
                                 <select className="main--div--register--form--input--hour--start" name="main--div--register--form--input--hour--start" id="main--div--register--form--input--hour--start">
                                     {Array.from(Array(24)).map( (elem, ind) => 
                                         <Fragment key={ind}>
-                                            <option value={ind + 'h' + '00'}>{ind + 'h' + '00'}</option>
-                                            <option value={ind + 'h' + '15'}>{ind + 'h' + '15'}</option>
-                                            <option value={ind+ 'h' + '30'}>{ind + 'h' + '30'}</option>
-                                            <option value={ind+ 'h' + '45'}>{ind + 'h' + '45'}</option>
+                                            <option value={ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}>{ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}</option>
+                                            <option value={ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}>{ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}</option>
+                                            <option value={ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}>{ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}</option>
+                                            <option value={ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}>{ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}</option>
                                         </Fragment>
                                     )}
 
@@ -222,6 +304,26 @@ export default function ProposeRace() {
 
                     </fieldset>
 
+                    <fieldset className="main--div--form--fieldset fieldset--race--level">
+                        <legend className="main--div--form--proposerace--where">Nivel carrera</legend>
+
+                        <div className="main--form--findrunners--hour--box">
+                            
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--race--level">
+                                    Nivel de la carrera *:
+                                </label>
+                                
+
+                                <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level">
+                                    <option value="bajo">Bajo</option>
+                                    <option value="medio">Medio</option>
+                                    <option value="alto">Alto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
                     <fieldset className="main--div--form--fieldset fieldset--howmany--users">
                         <legend className="main--div--form--proposerace--where">Participantes</legend>
                         
@@ -238,6 +340,24 @@ export default function ProposeRace() {
                             </div>
                             
                             <input className="main--div--register--form--input--hour--start maximum--users" type="number" name="main--div--register--form--input--hour--start maximum--users" id="main--div--register--form--input--hour--start maximum--users" />
+
+                        </div>
+                        
+                        <div className="main--div--register--form--wrap--label--input">
+                            
+                            <div className="main--form--findrunners--checkbox--male--wrap--div">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
+                                        ¿Solo chicos?: 
+                                </label>
+                                <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" />
+                            </div>
+
+                            <div className="main--form--findrunners--checkbox--female--wrap--div">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
+                                        ¿Solo chicas?: 
+                                </label>
+                                <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" />
+                            </div>
 
                         </div>
 

@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useContext, useEffect } from "react";
 
 import { useState } from "react";
-import { UserContext } from "../layout";
+import { UserContext, UtilsContext } from "../layout";
+import BackButton from "../../../components/BackButton/page";
 
 export default function Register() {
 
     const router = useRouter();
 
     const userContext = useContext(UserContext);
+    const utilsContext = useContext(UtilsContext);
 
     const handleSubmitRegister = async (e: FormEvent<HTMLFormElement>) => {
 
@@ -22,6 +24,7 @@ export default function Register() {
         const lastName = (document.getElementsByClassName("main--div--register--form--input--lastname")[0] as HTMLInputElement);
         const email = (document.getElementsByClassName("main--div--register--form--input--email")[0] as HTMLInputElement);
         const birthDate = (document.getElementsByClassName("main--div--register--form--input--birthdate")[0] as HTMLInputElement);
+        const gender = (document.getElementsByClassName("main--div--register--form--select--gender")[0] as HTMLSelectElement);
         const streetNumber = (document.getElementsByClassName("main--div--register--form--input--street--number")[0] as HTMLInputElement);
         const streetName = (document.getElementsByClassName("main--div--register--form--input--street--name")[0] as HTMLInputElement);
         const zipCode = (document.getElementsByClassName("main--div--register--form--input--zip--code")[0] as HTMLInputElement);
@@ -32,7 +35,7 @@ export default function Register() {
         const divError = (document.getElementsByClassName("error--div")[0] as HTMLDivElement);
         const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
 
-        if (firstName.value == "" || lastName.value == "" || email.value == "" || streetNumber.value == "" || streetName.value == "" || zipCode.value == "" || city.value == "" || password.value == "" || passwordConfirm.value == "") {
+        if (firstName.value == "" || lastName.value == "" || email.value == "" || birthDate.value == "" || streetName.value == "" || zipCode.value == "" || city.value == "" || password.value == "" || passwordConfirm.value == "") {
 
             window.scrollTo({
                 top: 0,
@@ -62,6 +65,7 @@ export default function Register() {
                         lastName: lastName.value,
                         email: email.value,
                         birthDate: birthDate.value,
+                        gender: gender.value,
                         streetNumber: streetNumber.value,
                         streetName: streetName.value,
                         zipCode: zipCode.value,
@@ -112,6 +116,17 @@ export default function Register() {
                             divError.classList.remove("active");
                         }, 3000);
                     }
+
+                    else if (responseData.error.startsWith("Invalid character")) {
+
+                        document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                        divErrorPelement.textContent = "Algunos caracteres no están permitidos.";
+                        divError.classList.add("active");
+
+                        setTimeout(() => {
+                            divError.classList.remove("active");
+                        }, 3000);
+                    }
                 }
 
                 else {
@@ -150,11 +165,16 @@ export default function Register() {
     };
 
     useEffect(() => {
-        console.log(userContext);
-    }, [userContext.getUserData]);
+        utilsContext.setBackButton(window.location.pathname);
+    }, []);
+
+    console.log(userContext.getUserData);
+
 
     return (
         <main className="main">
+
+            <BackButton pathname={utilsContext.backButton}/>
             
             <div className="main--div main--div--register">
 
@@ -171,28 +191,41 @@ export default function Register() {
                 <form className="main--div--register--form" onSubmit={handleSubmitRegister}>
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--firstname">
-                            Nombre:
+                            Nombre*:
                         </label>
                         <input className="main--div--register--form--input--firstname" type="text" name="main--div--register--form--input--firstname" id="main--div--register--form--input--firstname" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--lastname">
-                            Apellido:
+                            Apellido*:
                         </label>
                         <input className="main--div--register--form--input--lastname" type="text" name="main--div--register--form--input--lastname" id="main--div--register--form--input--lastname" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--birthdate">
-                            Fecha de nacimiento:
+                            Fecha de nacimiento*:
                         </label>
                         <input className="main--div--register--form--input--birthdate" type="date" name="main--div--register--form--input--birthdate" id="main--div--register--form--input--birthdate" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
+                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--select--gender">
+                            Género*:
+                        </label>
+
+                        <select className="main--div--register--form--select--gender" name="main--div--register--form--select--gender" id="main--div--register--form--select--gender">
+                            
+                            <option value="male">Hombre</option>
+                            <option value="female">Mujer</option>
+
+                        </select>
+                    </div>
+
+                    <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--email">
-                            Correo electrónico:
+                            Correo electrónico*:
                         </label>
                         <input className="main--div--register--form--input--email" type="email" name="main--div--register--form--input--email" id="main--div--register--form--input--email" />
                     </div>
@@ -206,40 +239,42 @@ export default function Register() {
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
-                            Nombre de calle:
+                            Nombre de calle*:
                         </label>
                         <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--zip--code">
-                            Código postal:
+                            Código postal*:
                         </label>
                         <input className="main--div--register--form--input--zip--code" type="number" name="main--div--register--form--input--zip--code" id="main--div--register--form--input--zip--code" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
-                            Ciudad:
+                            Ciudad*:
                         </label>
                         <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password">
-                            Contraseña:
+                            Contraseña*:
                         </label>
                         <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" />
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password--confirm">
-                            Confirmar contraseña:
+                            Confirmar contraseña*:
                         </label>
                         <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" />
                     </div>
 
-                    <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar</button>
+                    <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar
+                    <span className="hover--button--span"></span>
+                    </button>
 
                 </form>
             </div>

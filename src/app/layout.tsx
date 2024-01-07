@@ -2,6 +2,7 @@
 
 import "../../public/assets/css/style.css";
 import Header from "../../components/Header/page";
+import Footer from "../../components/Footer/page";
 
 import { createContext, useEffect, useState } from "react";
 
@@ -13,24 +14,13 @@ export interface RaceInterface {
     nameStreet: string;
     numberStreet: number;
     numberUsers: number;
+    onlyMale: string;
+    onlyFemale: string;
     raceDate: string;
     raceDuration: string;
     raceTime: string;
     userId: number;
 }
-
-/*export const RaceContext = createContext<RaceInterface>({
-  id: NaN,
-  city: "",
-  further_details: "",
-  streetName: "",
-  streetNumber: NaN,
-  number_users: NaN,
-  race_date: "",
-  race_duration: "",
-  race_time: "",
-  user_id: NaN,
-})*/
 
 export interface GetUserInterface {
   id: number;
@@ -43,6 +33,8 @@ export interface GetUserInterface {
   streetName: string;
   zipCode: number;
   city: string;
+  gender: string;
+  picture: string;
 }
 
 export interface UserInterface {
@@ -70,12 +62,24 @@ export const UserContext = createContext<UserInterface>({
     streetName: "",
     zipCode: NaN,
     city: "",
+    gender: "",
+    picture: ""
   },
   setUserDataFunction: () => {},
   message: "",
   setMessage: () => {},
   jwt: "",
   setJwtFunction: () => {}
+});
+
+export interface UtilsInterface {
+  backButton: string,
+  setBackButton(path: string): void
+}
+
+export const UtilsContext = createContext<UtilsInterface>({
+  backButton: "",
+  setBackButton: (path: string) => {}
 });
 
 export default function RootLayout({ children, }: {children: React.ReactNode}) {
@@ -90,7 +94,9 @@ export default function RootLayout({ children, }: {children: React.ReactNode}) {
     streetNumber: NaN,
     streetName: "",
     zipCode: NaN,
-    city: ""
+    city: "",
+    gender: "",
+    picture: ""
   });
 
   const setUserDataFunction = (objInit: GetUserInterface, objAdd: GetUserInterface) => {
@@ -126,13 +132,90 @@ export default function RootLayout({ children, }: {children: React.ReactNode}) {
     setJwtFunction: setJwtFunction
   };
 
-  /*const raceContextObject = {
+  const [getBackButton, setBackButton] = useState<string>("");
 
-  }*/
+  const setBackButtonFunc = (path: string) => {
+
+    setBackButton(path);
+  };
+
+  const utilsContextObject: UtilsInterface = {
+    backButton: getBackButton,
+    setBackButton: setBackButtonFunc
+  };
+
+  const handleLogOut = () => {
+
+    sessionStorage.removeItem("lastActivity");
+
+    setJwt("");
+
+    const getUserDataEmptyObject: GetUserInterface = {
+        id: NaN,
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        birthDate: "",
+        streetNumber: NaN,
+        streetName: "",
+        zipCode: NaN,
+        city: "",
+        gender: "",
+        picture: ""
+    }
+
+    document.removeEventListener("mousemove", timerSet);
+    setUserDataFunction(getUserData, getUserDataEmptyObject);
+    setCount(getCount + 1);
+  };
+
+  const handleTimerLogout = () => {
+
+    sessionStorage.setItem("lastActivity", new Date().toString());
+
+  };
+
+  const timerSet: any = handleTimerLogout;
 
   useEffect(() => {
-    console.log(getUserData);
-  }, [getCount])
+
+    let intervalTimer: NodeJS.Timeout;
+
+    if (getUserData.email.length > 0) {
+
+        sessionStorage.setItem("lastActivity", new Date().toString());
+
+        document.addEventListener("mousemove", timerSet);
+
+        intervalTimer = setInterval(() => {
+
+          const lastActivityDateInitial = new Date(sessionStorage.getItem("lastActivity") || "");
+
+          const expireDate = new Date(lastActivityDateInitial.setMilliseconds(1800000));
+
+          if (expireDate < new Date()) {
+
+            handleLogOut();
+          }
+        }, 10000);
+    }
+
+    return () => {
+
+      if (getUserData.email.length == 0) {
+
+        document.removeEventListener("mousemove", timerSet);
+        clearInterval(intervalTimer);
+      }
+    }
+
+  }, [getCount]);
+
+  useEffect(() => {
+
+    setBackButton(window.location.pathname);
+  }, []);
 
   return (
     <html lang="en">
@@ -143,12 +226,15 @@ export default function RootLayout({ children, }: {children: React.ReactNode}) {
       </head>
       
       <UserContext.Provider value={userContextObject}>
-        <body>
-          <div className="container">
-            <Header />
-            {children}
-          </div>
-        </body>
+        <UtilsContext.Provider value={utilsContextObject}>
+          <body>
+            <div className="container">
+              <Header />
+              {children}
+              <Footer />
+            </div>
+          </body>
+        </UtilsContext.Provider>
       </UserContext.Provider>
     </html>
   );

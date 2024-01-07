@@ -4,10 +4,33 @@
     --borderColor: #8eb1ef;
     --secondaryBorderColor: #8eb1ef4a;
     --divErrorColor: #ff0000;
+    --lowLevel: #00800073;
+    --midLevel: #eb9817a1;
+    --highLevel: #eb1717a1;
+    --levelColor: #8eb1ef;
 }
 
 html {
     height:100%;
+}
+
+.back--img--anchor {
+
+    height: 3.5rem;
+    width: 2.5rem;
+    display: block;
+}
+
+.back--img--anchor--wrap {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.back--img--arrow {
+
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
 }
 
 body {
@@ -15,7 +38,7 @@ body {
     margin: 0;
 }
 
-.cancel--button--participate--span--no {
+.cancel--button--participate--span--no, .cancel--button--race--span--no {
     position: absolute;
     right: 1rem;
     bottom: 1rem;
@@ -23,7 +46,7 @@ body {
     opacity: 0;
 }
 
-.cancel--button--participate--span--yes {
+.cancel--button--participate--span--yes,.cancel--button--race--span--yes {
     position: absolute;
     left: 1rem;
     bottom: 1rem;
@@ -31,11 +54,93 @@ body {
     opacity: 0;
 }
 
+.chat--race--users {
+    height: 30rem;
+    width: 95%;
+    background-color: inherit;
+    margin: 1rem auto 2rem auto;
+}
+
+.chat--race--users--chat {
+    height: 78%;
+    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    margin-bottom: 0.5rem;
+    overflow-y: scroll;
+}
+
+.chat--race--users--chat--message--div.fake--div {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.chat--race--users--chat--message--div {
+    font-family: var(--mainFont);
+    font-size: .9rem;
+    margin-top: .7rem;
+    word-break: break-all;
+}
+
+.chat--race--users--chat--message--div--span--user {
+    color: #918024;
+    font-weight: bold;
+}
+
+.chat--race--users--chat--message--div--span--message {
+    color: #313131;
+    padding-left: 0.7rem;
+}
+
+.chat--race--users--chat--message--div--span--datetime {
+    display: block;
+    font-style: italic;
+    color: #676767;
+}
+
+.chat--race--users--button--send {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    height: 1.3rem;
+    width: 6rem;
+    margin: 0 auto;
+    display: block;
+    background-color: var(--colorTitle);
+    border: 2px groove var(--borderColor);
+    border-radius: 5px;
+
+}
+
+.chat--race--users--form--send--message--input {
+    background-color: inherit;
+    margin: 0.5rem auto 0.5rem auto;
+    width: 90%;
+    display: block;
+    height: 1.1rem;
+    font-size: 1rem;
+}
+
 .container {
     min-height: 100%;
     background-color: rgb(169, 209, 228);
     display: flex;
     flex-flow: column nowrap;
+    overflow-x: hidden;
+}
+
+.delete--picture {
+    height: 1.5rem;
+    width: 2rem;
+    border-radius: 5px;
+    border-color: var(--borderColor);
+    border-style: inset;
+    border-width: 2px;
+    background-color: inherit;
+    font-family: var(--mainFont);
+    display: block;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .2s;
 }
 
 .error--div {
@@ -53,11 +158,11 @@ body {
     border: 2px groove var(--divErrorColor);
     visibility: hidden;
     opacity: 0;
-    transition: all cubic-bezier(0.15, 0.79, 0.46, 0.99) .7s;
+    transition: all cubic-bezier(0.15, 0.79, 0.46, 0.99) .4s;
 }
 
 .error--div.error--div--signin {
-    top: 2%;
+    top: 9%;
 }
 
 .error--div.error--div--proposerace {
@@ -70,6 +175,10 @@ body {
     left: 50%;
 }
 
+.error--div.profile {
+    top: -11%;
+}
+
 .error--div.active {
     visibility: visible;
     opacity: 1;
@@ -77,13 +186,13 @@ body {
 }
 
 .error--div.error--div--race {
-    top: -12%;
+    top: -9%;
 }
 
 .error--div--p {
     margin: 0;
     font-family: var(--mainFont);
-    font-size: .9rem;
+    font-size: 1rem;
     color: var(--divErrorColor);
     padding: 0.5rem;
     text-align: center;
@@ -91,7 +200,61 @@ body {
 
 .error--div--app {
     bottom: 100%;
-    top: 4%;
+    top: 2%;
+}
+
+.footer {
+    height: 10rem;
+    width: 100%;
+    margin-top: 5rem;
+}
+
+.footer--ul {
+    font-family: var(--mainFont);
+    list-style-type: none;
+    padding: 0;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.footer--ul--anchor {
+    color: #000000c7;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.border--bottom--span--hover {
+    width: 0%;
+    display: block;
+    border-bottom: 1px solid black;
+    transition: width linear .1s;
+}
+
+.border--bottom--span--hover.active {
+    visibility: hidden;
+}
+
+.footer--copyrights {
+    color: #000000c7;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+}
+
+.footer--ul--anchor:hover .border--bottom--span--hover {
+    width: 100%;
+}
+
+.footer--ul--li {
+    display: inline;
 }
 
 .header {
@@ -105,6 +268,14 @@ body {
     flex-flow: row nowrap;
     height: 50%;
     justify-content: space-around;
+    /*background-image:url("http://localhost:8080/pictures/jogging-f.jpg");*/
+}
+
+.header--h1--wrap--anchor--menu {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
 }
 
 .header--h1--anchor {
@@ -117,15 +288,15 @@ body {
     margin: 0;
     font-family: var(--mainFont);
     font-size: 2rem;
-    font-style: italic;
     color: var(--colorTitle);
-    /*text-shadow: -3px 0px 0px black, 1px 0px 0px black, 0px -1px 0px black, 0px 1px 0px black;*/
     display: flex;
     flex-flow: column nowrap;
 }
 
 .header--h1--span {
     padding-left: 1rem;
+    position: relative;
+    top: 0.55rem;
 }
 
 .header--h1--img--wrap {
@@ -134,16 +305,16 @@ body {
 }
 
 .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(1) {
-    transform: rotate(180deg) translate(0.85rem, -1.3rem);
+    transform: rotate(180deg) translate(0.8rem, -1.3rem);
     width: 20%;
 }
 
 .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(2) {
-    transform: rotate(-37deg) translate(-0.5rem, 0rem);
+    transform: rotate(-37deg) translate(-0.4rem, 0.05rem);
 }
 
 .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(3) {
-    transform: rotate(95deg) translate(-0.05rem, 0.73rem);
+    transform: rotate(95deg) translate(-0.05rem, 0.67rem);
     width: 20%;
 }
 
@@ -156,8 +327,11 @@ body {
 }
 
 .header--h1--img {
-    height: 100%;
-    width: 5rem;
+    height: 5.5rem;
+    width: 5.5rem;
+    position: relative;
+    bottom: 0.5rem;
+    right: 0.5rem;
 }
 
 .header--h1--img--wrap--div--menu {
@@ -172,6 +346,8 @@ body {
     justify-content: space-around;
     align-items: center;
     cursor: pointer;
+    z-index: 1;
+    transition: all .3s;
 }
 
 .header--h1--img--wrap--div--menu--span {
@@ -190,7 +366,7 @@ body {
     position: relative;
     right: -6px;
     width: 60%;
-    transform: rotate(0deg) translate(0, 0);
+    transform: rotate(0deg) translate(-1px, 0);
     transition: all .3s;
 }
 
@@ -198,8 +374,26 @@ body {
     position: relative;
     right: -2px;
     width: 80%;
-    transform: rotate(0deg) translate(0, 0);
+    transform: rotate(0deg) translate(-1px, 0);
     transition: all .3s;
+}
+
+.image--switch {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 10rem;
+    right: 1rem;
+}
+
+.infinite--img {
+    position: relative;
+    top: .2rem;
+}
+
+.image--simulate {
+    height: 15px;
+    width: 15px;
 }
 
 .main {
@@ -209,12 +403,12 @@ body {
 }
 
 .main.active {
-    filter: blur(1px);
+    filter: blur(3px);
 }
 
 .main--div {
     width: 90%;
-    min-height: 15rem;
+    min-height: 10rem;
     margin: 2rem auto 0 auto;
     border: 2px groove var(--borderColor);
     background-color: var(--colorTitle);
@@ -249,7 +443,14 @@ body {
 }
 
 .main--div--form--fieldset.fieldset--howmany--users {
-    height: 10rem;
+    height: 15rem;
+}
+.main--div--form--fieldset.fieldset--howmany--users.update--race {
+    height: 28rem;
+}
+
+.main--div--form--fieldset.fieldset--race--level {
+    height: 6rem;
 }
 
 .main--div--form--proposerace--where {
@@ -271,6 +472,43 @@ body {
     justify-content: flex-start;
 }
 
+.main--div.my--races {
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    margin-top: 10rem;
+}
+
+.main--div--picture {
+    width: 100%;
+    margin: 2rem 0 0 0;
+    background-color: var(--colorTitle);
+}
+
+.main--div--picture--text--p {
+    margin: 0;
+    padding: .5rem;
+    font-family: var(--mainFont);
+    word-spacing: 2px;
+}
+
+.main--div--picture--wrap {
+    background-color: rgb(169, 209, 228);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.main--div--picture--wrap--img {
+    height: 40%;
+    width: 100%;
+}
+
+.main--div--picture--img {
+    height: 100%;
+    width: 100%;
+}
+
 .main--div--proposerace {
     display: flex;
     flex-flow: column nowrap;
@@ -284,11 +522,73 @@ body {
     height: 7rem;
 }
 
+.main--div--register.main--div--profile--review.off {
+    visibility: hidden;
+}
+
+.main--div--register.main--div--profile--review {
+    position: absolute;
+    top: 3.5rem;
+    transform: translateX(-50%);
+    /* left: 200%; */
+    height: 59rem;
+    animation: hideRightLeftMoveReview 1s forwards;
+}
+
+.main--div--register.main--div--profile--review.active {
+    position: absolute;
+    top: 3.5rem;
+    transform: translateX(-50%);
+    left: 50%;
+    height: 59rem;
+    animation: rightLeftMoveReview .7s;
+}
+
+@keyframes rightLeftMoveReview {
+    0% {
+        left: 200%;
+    }
+
+    100% {
+        left: 50%;
+    }
+}
+
+@keyframes hideRightLeftMoveReview {
+    0% {
+        left: 50%;
+    }
+
+    100% {
+        left: -100%;
+    }
+}
+
 .main--div--p {
     font-family: var(--mainFont);
     margin: 0;
-    font-size: .9rem;
+    font-size: 1.1rem;
     padding: 0.5rem;
+}
+
+.main--div--raceid--only--sex.male {
+    display: block;
+    margin: 1rem 0 0 0;
+    font-family: var(--mainFont);
+    background-color: var(--borderColor);
+    color: #000000;
+    border-radius: 3px;
+    transform: rotate(350deg);
+}
+
+.main--div--raceid--only--sex.female {
+    display: block;
+    margin: 1rem 0 0 0;
+    font-family: var(--mainFont);
+    background-color: #ff377e;
+    color: #000000;
+    border-radius: 3px;
+    transform: rotate(350deg);
 }
 
 .main--div--raceid--details--race--ul {
@@ -330,12 +630,73 @@ body {
     flex-flow: column nowrap;
     height: auto;
     position: relative;
+    top: 3.5rem;
     margin-top: 8rem;
+    left: 0;
+    transition: left .7s;
 }
 
-.main--div--register--form--button--submit button--submit--participate
+.main--div--register.main--div--profile {
+    position: relative;
+    top: 3.5rem;
+    margin-top: 8rem;
+    /*left: -100%;
+    transition: left .7s;*/
+    animation: hideRightLeftMove .7s forwards;
+}
 
-.main--div--register--form--input--birthdate.active {
+.main--div--register.main--div--profile.active {
+    /*left: 0;*/
+    animation: rightLeftMove .7s;
+}
+
+@keyframes rightLeftMove {
+    0% {
+        left: 200%
+    }
+
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes hideRightLeftMove {
+    0% {
+        left: 0;
+    }
+
+    100% {
+        left: -100%;
+    }
+}
+
+.main--div--register--form--button--submit.button--submit--participate.cancel--button--participate--update {
+
+    font-size: 1rem;
+    letter-spacing: 2px;
+    height: 3.5rem;
+    width: 10rem;
+    position: relative;
+    transition: background-color .5s;
+}
+
+.main--div--register--form--input--picture {
+    display: none;
+}
+
+.main--div--register--form--input--picture--div {
+    height: 11rem;
+    width: 85%;
+    margin: 1rem auto;
+}
+
+.main--div--register--form--input--picture--img {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.main--div--register--form--input--birthdate--start.active, .main--div--register--form--input--birthdate--end.active {
     display: none;
 }
 
@@ -361,6 +722,25 @@ body {
     display: none;
 }
 
+.main--div--register--form--input--race--level {
+    text-align: center;
+    width: 6rem;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.main--div--register--form--input--race--level option:nth-of-type(1) {
+    background-color: var(--lowLevel);
+}
+
+.main--div--register--form--input--race--level option:nth-of-type(2) {
+    background-color: var(--midLevel);
+}
+
+.main--div--register--form--input--race--level option:nth-of-type(3) {
+    background-color: var(--highLevel);
+}
+
 .main--div--register--form {
     height: 100%;
     width: 100%;
@@ -371,11 +751,47 @@ body {
     font-size: .9rem;
 }
 
+.main--div--register--form--label.picture {
+    height: 1.3rem;
+    width: 7rem;
+    border-radius: 5px;
+    border-color: var(--borderColor);
+    border-style: inset;
+    border-width: 2px;
+    background-color: inherit;
+    font-family: var(--mainFont);
+    display: block;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.main--div--register--form--label.picture:hover, .delete--picture:hover {
+    background-color: var(--secondaryBorderColor);
+}
+
+.main--div--register--form--label.birthdate.active {
+    display: none;
+}
+
 .main--div--register--form--label.wrap--label {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     margin-top: .7rem;
+}
+
+.main--div--register--form--select--gender {
+    border-radius: 5px;
+    border-color: var(--borderColor);
+    margin: 0 auto;
+    width: 87%;
+    height: 1.5rem;
+    font-family: var(--mainFont);
+    background-color: white;
+    border-width: 2px;
+    border-style: inset;
+    padding: 1px 0;
+    cursor: pointer;
 }
 
 .main--div--register--form--wrap--label--input {
@@ -393,18 +809,38 @@ body {
     font-family: var(--mainFont);
 }
 
-.main--div--register--form--button--submit {
+.main--div--register--form--button--submit, .profile--user--comment--form--button {
     border-color: var(--borderColor);
     border-radius: 5px;
     width: 75%;
-    background-color: inherit;
+    background: inherit;
     font-family: var(--mainFont);
     font-size: .9rem;
     letter-spacing: 3px;
     display: block;
     margin: 1rem auto;
     cursor: pointer;
+    height: 1.6rem;
+    position: relative;
 }
+
+.hover--button--span {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(146deg, #0000000d, #00800036);
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.main--div--register--form--button--submit:hover .hover--button--span {
+
+    opacity: 1;
+}
+
 
 .main--div--register--form--button--submit.button--submit--participate.cancel--button--participate {
     font-size: 1rem;
@@ -422,7 +858,9 @@ body {
 }
 
 .main--div--register--form--button--submit.button--submit--participate.cancel--button--participate.active--cancel .cancel--button--participate--span--yes,
-.main--div--register--form--button--submit.button--submit--participate.cancel--button--participate.active--cancel .cancel--button--participate--span--no {
+.main--div--register--form--button--submit.button--submit--participate.cancel--button--participate.active--cancel .cancel--button--participate--span--no,
+.main--div--register--form--button--submit.button--submit--participate.cancel--button--participate.active--cancel .cancel--button--race--span--yes,
+.main--div--register--form--button--submit.button--submit--participate.cancel--button--participate.active--cancel .cancel--button--race--span--no {
     visibility: visible;
     opacity: 1;
 }
@@ -473,14 +911,24 @@ body {
     height: 3rem;
     font-family: var(--mainFont);
     font-size: .9rem;
-    text-decoration: underline;
+    text-decoration: none;
     color: black;
-    background: linear-gradient(to left, #a9c8ff, #b0cbfb);
+    background: linear-gradient(to left, #a9c8ff, var(--levelColor));
     background-size: 200% 100%;
     transition: all .4s;
     background-position-x: 200%;
     opacity: .8;
     margin-top: 1.3rem;
+}
+
+.main--div--ul--last--races--anchor.low--level {
+    background: linear-gradient(to right, var(--colorTitle) 5%, var(--lowLevel) 100%);
+}
+.main--div--ul--last--races--anchor.mid--level {
+    background: linear-gradient(to right, var(--colorTitle) 5%, var(--midLevel) 100%);
+}
+.main--div--ul--last--races--anchor.high--level {
+    background: linear-gradient(to right, var(--colorTitle) 5%, var(--highLevel) 100%);
 }
 
 .main--div--ul--last--races--anchor:hover {
@@ -495,8 +943,23 @@ body {
 }
 
 .main--div--ul--last--races--span--city {
-    display: flex;
-    align-items: center;
+    /*display: flex;
+    align-items: center;*/
+    text-decoration: underline;
+    width: 4rem;
+    word-break: break-word;
+    overflow: scroll;
+    display: block;
+    padding-top: 0.8rem;
+    padding-left: 0.2rem;
+}
+
+.main--div--ul--last--races--span--city::-webkit-scrollbar {
+    display: none;
+}
+
+.main--div--ul--last--races--span--race--date, .main--div--ul--last--races--span--race--time {
+    text-decoration: underline;
 }
 
 .main--div--ul--last--races--date--time--wrap {
@@ -504,21 +967,52 @@ body {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    width: 4rem;
+    font-size: .7rem;
 }
 
 .main--div--video {
     height: 20rem;
-    width: 90%;
+    width: 100%;
     margin: 9rem auto 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    opacity: .8;
+    opacity: .7;
 }
 
 .main--div--video--video {
     height: 100%;
+}
+
+.main--div--video--title--wrap {
+    position: relative;
+    margin: 0 auto;
+    width: 90%;
+    top: 12rem;
+}
+
+.main--div--video--title {
+    height: 8rem;
+    width: 85%;
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 1.5rem;
+    font-family: var(--mainFont);
+    z-index: 1;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    cursor: default;
+}
+
+.main--div--video--title span {
+    text-align: center;
+    height: 4rem;
 }
 
 .main--h2 {
@@ -540,6 +1034,19 @@ body {
     display: block;
     margin: 1rem auto;
     cursor: pointer;
+}
+
+.main--form--findrunners--checkbox--male--wrap--div, .main--form--findrunners--checkbox--female--wrap--div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: .7rem;
+}
+
+.main--form--findrunners--checkbox--male--wrap--div input, .main--form--findrunners--checkbox--female--wrap--div input {
+    height: 1rem;
+    width: 1rem;
+    margin: 3px 3px 3px 4px;
 }
 
 .main--form--findrunners--hour--box {
@@ -576,6 +1083,15 @@ body {
     justify-content: center;
 }
 
+.max--users--update--span {
+
+    font-family: var(--mainFont);
+    font-size: .9rem;
+    display: block;
+    margin: 1rem 0.5rem 0 0.5rem;
+    text-align: center;
+}
+
 .nav {
     height: 30rem;
     width: 90vw;
@@ -605,7 +1121,7 @@ body {
     background: linear-gradient(45deg, #979797, #3b6977a6);
     display: block;
     height: 2.8rem;
-    margin-left: -10rem;
+    margin-left: -50rem;
     border-radius: 7px;
     /* border-bottom-right-radius: 20px; */
     z-index: 1;
@@ -670,31 +1186,37 @@ body {
 /* --- */
 
 .nav--ul--anchor:nth-of-type(1).active {
-    transition: margin-left .2s;
+    transition: margin-left .15s;
     margin-left: 2rem;
 }
 
 .nav--ul--anchor:nth-of-type(2).active {
-    transition: margin-left .2s;
-    transition-delay: .1s;
+    transition: margin-left .15s;
+    transition-delay: .05s;
     margin-left: 2rem;
 }
 
 .nav--ul--anchor:nth-of-type(3).active {
-    transition: margin-left .2s;
-    transition-delay: .2s;
+    transition: margin-left .15s;
+    transition-delay: .1s;
     margin-left: 2rem;
 }
 
 .nav--ul--anchor:nth-of-type(4).active {
-    transition: margin-left .2s;
-    transition-delay: .3s;
+    transition: margin-left .15s;
+    transition-delay: .15s;
     margin-left: 2rem;
 }
 
 .nav--ul--anchor:nth-of-type(5).active {
-    transition: margin-left .2s;
-    transition-delay: .4s;
+    transition: margin-left .15s;
+    transition-delay: .2s;
+    margin-left: 2rem;
+}
+
+.nav--ul--anchor:nth-of-type(6).active {
+    transition: margin-left .15s;
+    transition-delay: .25s;
     margin-left: 2rem;
 }
 
@@ -704,6 +1226,61 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.profile--star--wrap {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.profile--star {
+    height: 20px;
+    width: 20px;
+}
+
+.profile--star.profile--star--comment {
+    height: 10px;
+    width: 10px;
+}
+
+.profile--user--comment--form {
+    width: 85%;
+    margin: 4rem auto 0 auto;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+}
+
+.profile--user--comment--select--rate {
+    width: 3rem;
+    height: 1.6rem;
+    margin: 0 auto;
+    background-color: inherit;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.profile--user--comment--textarea--comment {
+    resize: none;
+    height: 7rem;
+    border: 1px solid var(--borderColor);
+    background-color: var(--colorTitle);
+}
+
+.profile--user--comments {
+    height: 9rem;
+    width: 90%;
+    margin: 1rem auto 0 auto;
+    border: 1px solid var(--borderColor);
+    background-color: var(--colorTitle);
+    overflow-y: scroll;
+}
+
+.raceid--details--detail--name.chat--race {
+    display: block;
+    font-size: 1.1rem;
+    font-family: var(--mainFont);
 }
 
 .raceid--details--detail--name {
@@ -721,8 +1298,492 @@ body {
 
 .raceid--details--detail--value--further--details {
     height: 10rem;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    padding: .3rem;
+}
+
+.scroll--animation--left {
+    width: 100%;
+    margin: 2rem 0 0 0;
+    background-color: var(--colorTitle);
+    opacity: 0;
+    transform: translateX(-7.5rem);
+    transition: opacity .2s, transform .7s;
+}
+
+.scroll--animation--left.scroll--animation--active, 
+.scroll--animation--right.scroll--animation--active {
+    opacity: .8;
+    transform: translateX(0);
+    transition: opacity .2s, transform .7s;
+}
+
+.scroll--animation--right {
+    width: 100%;
+    margin: 2rem 0 0 0;
+    background-color: var(--colorTitle);
+    opacity: 0;
+    transform: translateX(7.5rem);
+    transition: opacity 2s, transform .7s;
+}
+
+.span--number--users--registered {
+    width: 20%;
+    display: flex;
+    justify-content: center;
 }
 
 .ul--list--registered--users--race {
     list-style-type: disc;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 0;
+    text-align: center;
+}
+
+.ul--list--registered--users--race--li--profile {
+    height: 0rem;
+    width: 10rem;
+    position: absolute;
+    border: 2px groove var(--borderColor);
+    background-color: #ebf7fd;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .2s;
+}
+
+.ul--list--registered--users--race--li--profile span:nth-of-type(2) {
+    width: 5rem;
+    word-break: break-all;
+}
+
+.ul--list--registered--users--race--li--profile--span--title {
+    display: inline-block;
+    text-align: left;
+    padding-left: 0.5rem;
+    width: 5rem;
+}
+
+.ul--list--registered--users--race--li--profile--wrap--details {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: .3rem;
+    margin-top: 1rem;
+}
+
+.ul--list--registered--users--race--li--profile--confidence--wrap--element {
+    margin-top: 1rem;
+}
+
+.ul--list--registered--users--race--li--profile--wrap--element {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.ul--list--registered--users--race--li--profile.active {
+    height: 25rem;
+    visibility: visible;
+    opacity: 1;
+    overflow-y: scroll;
+}
+
+.ul--list--registered--users--race--li {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+}
+
+.ul--list--registered--users--race--li:hover .border--bottom--span--hover{
+    width: 100%;
+}
+
+.update--anchor--link {
+    text-decoration: none;
+}
+
+.upload--delete--picture--wrap {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.user--comment--div {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.user--comment--span, .user--comment--span--firstname {
+    font-size: .8rem;
+    text-align: center;
+    padding: .2rem;
+}
+
+.user--comment--span--date {
+    font-size: .7rem;
+    font-style: italic;
+    color: #5f5f5f;
+}
+
+.wrap--users--sex {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* MEDIA QUERIES */
+
+@media (min-width: 300px) {
+
+    .header--h1 {
+        font-size: 2.5rem;
+    }
+
+    .header--h1--anchor {
+        width: 9rem;
+    }
+
+    .header--h1--img {
+        position: relative;
+        right: 1rem;
+        bottom: 0.5rem;
+        height: 6rem;
+        width: 6.5rem;
+    }
+
+    .main--div {
+        width: 17rem;
+    }
+
+    .main--div--ul--last--races--anchor {
+        font-size: 1rem;
+    }
+
+    .main--div--ul--last--races--date--time--wrap {
+        font-size: .9rem;
+        width: 6rem;
+    }
+
+    .male-icon {
+        height: 20px;
+        width: 20px;
+    }
+}
+
+@media (min-width: 350px) {
+
+    .header--h1 {
+        font-size: 2.8rem;
+    }
+
+    .header--h1--anchor {
+        width: 13rem;
+    }
+
+    .header--h1--img--wrap {
+        width: 9rem;
+    }
+
+    .header--h1--img {
+        right: 0;
+        bottom: 0.5rem;
+        height: 7rem;
+        width: 7.5rem;
+    }
+
+    .header--h1--img--wrap--div--menu {
+        width: 4rem;
+    }
+
+    .header--h1--img--wrap--div--menu--span:nth-of-type(1){
+        right: -19px;
+    }
+
+    .header--h1--img--wrap--div--menu--span:nth-of-type(2){
+        right: -13px;
+    }
+
+    .header--h1--img--wrap--div--menu--span:nth-of-type(3){
+        right: -6px;
+    }
+
+    /**/
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(1) {
+        transform: rotate(180deg) translate(1.26rem, -1.5rem);
+        width: 20%;
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(2) {
+        transform: rotate(-37deg) translate(-0.5rem, 0rem);
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(3) {
+        transform: rotate(95deg) translate(0.07rem, 0.85rem);
+        width: 20%;
+    }
+
+    .header--h1--span {
+        top: 0.8rem;
+    }
+
+    .nav {
+        top: 150%;
+    }
+
+    .nav--ul--anchor {
+        font-size: 1.3rem;
+        width: 18rem;
+    }
+
+    .nav--ul--anchor:nth-of-type(1).active, .nav--ul--anchor:nth-of-type(2).active, .nav--ul--anchor:nth-of-type(3).active, .nav--ul--anchor:nth-of-type(4).active, .nav--ul--anchor:nth-of-type(5).active, .nav--ul--anchor:nth-of-type(6).active {
+        margin-left: 18%;
+    }
+}
+
+@media (min-width: 400px) {
+
+    .back--img--anchor {
+        height: 4.5rem;
+        width: 3.5rem;
+        position: relative;
+        left: 5%;
+    }
+
+    .main--div {
+        width: 21rem;
+    }
+
+    .main--div--picture--wrap {
+        width: 21rem;
+    }
+
+    .main--div--video--title span {
+        font-size: 2.2rem;
+    }
+
+    .main--div--p, .main--div--picture--text--p {
+        font-size: 1.3rem;
+    }
+
+    .main--div--register--title.title--last--race {
+        font-size: 1.6rem;
+    }
+
+    .main--div--ul--last--races--anchor {
+        height: 3.5rem;
+        font-size: 1.1rem;
+        margin-top: 1.6rem;
+    }
+
+    .main--div--register--title {
+        font-size: 1.5rem;
+    }
+
+    .main--div--register--form--label, .main--div--register--form--button--submit {
+        font-size: 1.1rem;
+        height: 1.8rem;
+    }
+
+    .main--div--register--form--wrap--label--input input, .main--div--signin--form--button--submit {
+        font-size: 1.2rem;
+    }
+    
+    .main--div--ul--last--races--date--time--wrap {
+        font-size: 1rem;
+        width: 7rem;
+    }
+
+    .main--div--signin {
+        height: 15rem;
+    }
+}
+
+@media (min-width: 450px) {
+
+    .back--img--anchor {
+        height: 5.5rem;
+        width: 4.5rem;
+    }
+
+    .header--h1 {
+        font-size: 3.5rem;
+    }
+
+    .header--h1--img {
+        left: 0.5rem;
+        width: 8rem;
+    }
+}
+
+@media (min-width: 550px) {
+
+    .back--img--anchor {
+        left: 0;
+        height: 6.5rem;
+        width: 5.5rem;
+    }
+
+    .header--h1--anchor {
+        width: 16rem;
+    }
+
+    .header--h1 {
+        font-size: 4.5rem;
+    }
+
+    .header--h1--img--wrap--div--menu {
+        height: 2rem;
+    }
+
+    .header--h1--img--wrap--div--menu--span {
+        border-width: 4px;
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu {
+        bottom: -3rem;
+        left: 20%;
+    }
+
+    .main--div, .main--div--picture--wrap, .header--h1--wrap--anchor--menu, .back--img--anchor--wrap {
+        width: 30rem;
+    }
+
+    .header--h1--wrap--anchor--menu {
+        justify-content: space-between;
+    }
+
+    .main--div--video {
+        height: 25rem;
+    }
+
+    .main--div--picture--wrap--img {
+        height: 36rem;
+    }
+
+    .main--div--register--form--button--submit, .main--div--signin--form--button--submit  {
+        width: 15rem;
+    }
+
+    .main--div--register--title {
+        font-size: 1.8rem;
+    }
+
+    .main--div--register--form--label, .main--div--register--form--button--submit {
+        font-size: 1.3rem;
+        height: 2rem;
+    }
+
+    .nav--ul--anchor:nth-of-type(1).active, .nav--ul--anchor:nth-of-type(2).active, .nav--ul--anchor:nth-of-type(3).active, .nav--ul--anchor:nth-of-type(4).active, .nav--ul--anchor:nth-of-type(5).active, .nav--ul--anchor:nth-of-type(6).active {
+        height: 3rem;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(1) {
+        transform: rotate(180deg) translate(1.3rem, -1.88rem);
+        width: 30%;
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(2) {
+        width: 80%;
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu .header--h1--img--wrap--div--menu--span:nth-of-type(3) {
+        transform: rotate(95deg) translate(-0.07rem, 1.12rem);
+        width: 30%;
+    }
+
+    .header--h1--img {
+        top: 2rem;
+        left: 0;    
+    }
+
+    .nav {
+        width: 34rem;
+    }
+    
+}
+
+@media (min-width: 700px) {
+
+    .back--img--anchor {
+        height: 7.5rem;
+        width: 6.5rem;
+    }
+
+    .header--h1--wrap--anchor--menu, .back--img--anchor--wrap {
+        width: 44rem;
+    }
+
+    .nav {
+        width: 54rem;
+    }
+
+    .nav--ul--anchor {
+        height: 3.3rem;
+        font-size: 1.3rem;
+    }
+
+    .header--h1--img--wrap--div--menu {
+        transition: all .5s;
+    }
+
+    .header--h1--img--wrap.active .header--h1--img--wrap--div--menu {
+        left: -53%;
+    }
+
+    .main--div {
+        width: 41rem;
+    }
+
+    .main--div--video {
+        width: 41.2rem;
+    }
+
+    .main--div--video--title {
+        top: 1rem;
+    }
+
+    .main--div--video--title span {
+        font-size: 2.7rem;
+    }
+
+    .scroll--animation--left {
+        transform: translateX(-10.5rem);
+    }
+
+    .scroll--animation--right {
+        transform: translateX(10.5rem);
+    }
+
+    .scroll--animation--left.scroll--animation--active {
+        transform: translateX(-5.6rem);
+    }
+
+    .scroll--animation--right.scroll--animation--active {
+        transform: translateX(5.6rem);
+    }
+}
+
+@media (min-width: 1000px) {
+
+    .header--h1--wrap--anchor--menu, .back--img--anchor--wrap {
+        width: 62rem;
+    }
+    
+    .nav--ul--anchor {
+        width: 21rem;
+    }
+
+    .nav--ul--anchor:nth-of-type(1).active, .nav--ul--anchor:nth-of-type(2).active, .nav--ul--anchor:nth-of-type(3).active, .nav--ul--anchor:nth-of-type(4).active, .nav--ul--anchor:nth-of-type(5).active, .nav--ul--anchor:nth-of-type(6).active {
+        height: 3.4rem;
+        left: 33%;
+        font-size: 1.4rem;
+    }
 }
