@@ -190,6 +190,8 @@ console.log(getLastRaces);
 
               <li className="main--div--ul--last--races--li">
 
+                <span className="main--div--ul--last--races--li--id--race">{(getLastRaces as any)[elem].id}</span>
+
                 <span className="main--div--ul--last--races--span--city">{(getLastRaces as any)[elem].city}</span>
 
                 <div className="main--div--ul--last--races--date--time--wrap">

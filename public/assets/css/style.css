@@ -8,6 +8,7 @@
     --midLevel: #eb9817a1;
     --highLevel: #eb1717a1;
     --levelColor: #8eb1ef;
+    --errorColor: #f14c4c;
 }
 
 html {
@@ -937,9 +938,21 @@ body {
 }
 
 .main--div--ul--last--races--li {
+    position: relative;
     height: 100%;
     display: flex;
     justify-content: space-around;
+}
+
+.main--div--ul--last--races--li--id--race {
+    position: absolute;
+    top: -0.7rem;
+    left: 0.5rem;
+    display: block;
+    border-radius: 15%;
+    transform: rotate(-20deg);
+    color: #000000e3;
+    font-size: .8rem;
 }
 
 .main--div--ul--last--races--span--city {
@@ -1226,6 +1239,79 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.profile--review--ul {
+    list-style-type: none;
+    padding: 0;
+    font-family: var(--mainFont);
+    width: 85%;
+}
+
+.profile--review--ul--li {
+    background-color: var(--secondaryBorderColor);
+    margin-top: 1rem;
+    position: relative;
+}
+
+.profile--review--ul--li--button--delete {
+    position: absolute;
+    right: 0;
+    border: 0;
+}
+
+.profile--review--ul--li--button--delete--div--wrap {
+    position: relative;
+}
+
+.profile--review--ul--li--button--delete--confirm--div {
+    position: absolute;
+    left: -8.51rem;
+    top: 2rem;
+    width: 9.4rem;
+    background: #f14c4c;
+    font-size: .9rem;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+.profile--review--ul--li--button--delete--confirm--div.active {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .5s;
+}
+
+.profile--review--ul--li--button--delete--confirm--div--yes--no--div {
+    height: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.profile--review--ul--li--button--delete--confirm--div--yes--no--div span {
+    width: 3rem;
+    cursor: pointer;
+}
+
+.profile--review--ul--li--span--comment {
+    word-break: break-all;
+    color: #333333;
+}
+
+.profile--review--ul--li--span--datetime {
+    font-size: .7rem;
+    font-style: italic;
+    color: #333333;
+}
+
+.profile--review--ul--li--div {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: .5rem;
+    padding: 0.5rem;
 }
 
 .profile--star--wrap {

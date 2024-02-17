@@ -1,9 +1,12 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { GetUserInterface, UserContext, UtilsContext } from "../layout";
 import BackButton from "../../../components/BackButton/page";
+
+import filledStar from "../../../public/assets/pictures/star-filled.svg";
+import emptyStar from "../../../public/assets/pictures/star-empty.svg";
 import arrowRightLeft from "../../../public/assets/pictures/arrow-right-left.svg";
 
 export default function Profile() {
@@ -28,6 +31,9 @@ export default function Profile() {
     });
 
 
+
+
+    const [fetchReviews, setFetchReviews] = useState<Array<any>>([]);
     // FETCH REVIEWS BY USER //
 
     const fetchReviewsByUserId = async (user_id: number) => {
@@ -36,6 +42,7 @@ export default function Profile() {
 
         const responseData = await response.json();
         console.log(responseData);
+        setFetchReviews(responseData);
     };
 
 
@@ -292,6 +299,12 @@ export default function Profile() {
         pictureImage.src = "http://localhost:8080/pictures/no_image.png";
     };
 
+
+
+
+
+
+
     // MANAGE SWITCH ELEMENTS //
 
     const handleClickSwitch = (e: React.MouseEvent) => {
@@ -302,6 +315,52 @@ export default function Profile() {
         const divReview = (document.getElementsByClassName("main--div--register main--div--profile--review")[0] as HTMLDivElement);
         divReview.classList.remove("off");
         divReview.classList.toggle("active");
+    };
+
+
+
+
+
+
+    // DELETE REVIEW //
+
+    const handleClickDeleteReview = async (e: React.MouseEvent, review_id: number) => {
+
+        e.preventDefault();
+        
+        (e.currentTarget.getElementsByClassName("profile--review--ul--li--button--delete--confirm--div")[0] as HTMLDivElement).classList.add("active");
+    };
+
+
+
+
+
+
+    // CONFIRM DELETE REVIEW //
+
+    
+
+
+
+
+
+
+    // CANCEL DELETE REVIEW //
+
+    const handleClickCancelDeleteReview = (e: React.MouseEvent, review_id: number) => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const confirmBoxAll = (document.getElementsByClassName("profile--review--ul--li--button--delete--confirm--div") as HTMLCollectionOf<HTMLDivElement>);
+
+        for (let ind = 0; ind < confirmBoxAll.length; ind++) {
+
+            if ((confirmBoxAll[ind].getAttribute("data-id-review") as string) == review_id.toString()) {
+
+                confirmBoxAll[ind].classList.remove("active");
+            }
+        }
     };
 
 
@@ -488,6 +547,70 @@ export default function Profile() {
                 <h2 className="main--div--register--title">
                     Reseñas
                 </h2>
+
+                <ul className="profile--review--ul">
+                    
+                    {Object.keys(fetchReviews).map(elem => 
+                        
+                       <li className="profile--review--ul--li">
+
+                            <button className="profile--review--ul--li--button--delete" name="profile--review--ul--li--button--delete" type="button" onClick={(e) => handleClickDeleteReview(e, (fetchReviews as any)[elem].review_id)}>
+                                <div className="profile--review--ul--li--button--delete--div--wrap">
+                                    <span className="profile--review--ul--li--button--delete--span">X</span>
+
+                                    <div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
+                                        <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
+
+                                        <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
+                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes">Sí</span>
+                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <div className="profile--review--ul--li--div">
+
+                                <span className="profile--review--ul--li--span--firstname">{(fetchReviews as any)[elem].users_first_name}</span>
+                                
+                                <div className="profile--review--ul--li--div--wrap--stars">
+                                    {Array.from(Array(Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
+                                        <Fragment key={ind}>
+                                        <Image
+                                            key={ind}
+                                            className="profile--star"
+                                            alt="star"
+                                            src={filledStar}
+                                            height={0}
+                                            width={0}
+                                        />
+                                        </Fragment>
+                                    )}
+
+                                    {Array.from(Array(5 - Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
+                                        <Fragment key={ind}>
+                                        <Image
+                                            key={ind}
+                                            className="profile--star"
+                                            alt="star"
+                                            src={emptyStar}
+                                            height={0}
+                                            width={0}
+                                        />
+                                        </Fragment>
+                                    )}
+
+
+                                </div>
+
+                                <span className="profile--review--ul--li--span--comment">{(fetchReviews as any)[elem].review_comment}</span>
+
+                                <span className="profile--review--ul--li--span--datetime">{(fetchReviews as any)[elem].review_created_at}</span>
+                            </div>
+                       </li>     
+                        
+                    )}
+                </ul>
 
                 <div className="main--div--register--form profile--opinion">
 

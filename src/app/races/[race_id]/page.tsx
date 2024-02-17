@@ -378,7 +378,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
             const date = new Date();
 
-            const currentDateTime = date.getFullYear() + "-" + Number(date.getMonth() + 1) + "-" + date.getDate() + " " + new Date().toLocaleTimeString([], {hour12: false});
+            let month = Number(date.getMonth() + 1).toString();
+            if (Number(month) < 10) {
+
+                month = "0" + month;
+            }
+
+            const currentDateTime = date.getFullYear() + "-" + month + "-" + date.getDate() + " " + new Date().toLocaleTimeString([], {hour12: false});
 
             //createMessage(firstName, inputMessage.value, currentDateTime);
 
@@ -397,6 +403,9 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
                     currentDateTime: currentDateTime
                 })
             });
+
+            const responseData = await response.json();
+            console.log(responseData);
 
             socket.send(JSON.stringify({
                 inputMessage: inputMessage.value,
