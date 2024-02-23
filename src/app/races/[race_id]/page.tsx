@@ -99,12 +99,57 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         });
     }
 
-    const handleClickParticipateRace = async (e: React.MouseEvent<HTMLButtonElement>, race_id: number) => {
+    const handleClickParticipateRace = async (e: React.MouseEvent<HTMLButtonElement>, race_id: number, race_date: string, race_time: string) => {
+
+        const raceDateTime = race_date + " " + race_time;
+
+        const dateTime = new Date();
+
+        let month: number | string = (Number(dateTime.getMonth()) + 1);
+        if (month < 10) {
+            month = "0" + month;
+        }
+
+        let day: number | string = Number(dateTime.getUTCDate());
+        if (day < 10) {
+            day = "0" + day;
+        }
+
+        let second: number | string = Number(dateTime.getSeconds());
+        if (second < 10) {
+            second = "0" + second;
+        }
+
+        const currentDateTime = dateTime.getFullYear() + "-" + month.toString() + "-" + day.toString() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + second.toString();
+
+        console.log(currentDateTime);
+        console.log(raceDateTime < currentDateTime);
+
+        
 
         const divError = (document.getElementsByClassName("error--div error--div--race")[0] as HTMLDivElement);
         const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
+
+
+        // check if race takes place after current date time //
+
+        if (raceDateTime < currentDateTime) {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+            document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+            divErrorPelement.textContent = "No es posible participar en una carrera que ya ha pasado";
+            divError.classList.add("active");
+
+            setTimeout(() => {
+                divError.classList.remove("active");
+            }, 3000);
+        }
         
-        if (userContext.getUserData.email == "") {
+        else if (userContext.getUserData.email == "") {
 
             window.scrollTo({
                 top: 0,
@@ -407,6 +452,9 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             const responseData = await response.json();
             console.log(responseData);
 
+
+
+
             socket.send(JSON.stringify({
                 inputMessage: inputMessage.value,
                 raceId: raceId,
@@ -419,7 +467,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             inputMessage.value = "";
             inputMessage.focus();
 
-            setCountFlag(countFlag + 1);
+            //setCountFlag(countFlag + 1);
         }
     };
 
@@ -460,7 +508,8 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             id: null,
             age: null,
             city: "" ,
-            average_rate: null   
+            average_rate: null,
+            picture: null
         }
     );
 
@@ -526,7 +575,8 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
         const objProfile: any = {};
 
-        Object.keys(responseData).forEach( key => key == "age" || key == "city" || key == "id" || key == "average_rate" ? objProfile[key] = responseData[key] : "");
+        Object.keys(responseData).forEach( key => key == "age" || key == "city" || key == "id" || key == "picture" ? objProfile[key] = responseData[key] : key == "average_rate" ? objProfile[key] = Math.ceil(responseData[key]) : "");
+
 
         setUserProfile(objProfile);
 
@@ -669,7 +719,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
                 const objProfile: any = {};
 
-                Object.keys(responseData).forEach( key => key == "age" || key == "city" || key == "id" || key == "average_rate" ? objProfile[key] = responseData[key] : "");
+                Object.keys(responseData).forEach( key => key == "age" || key == "city" || key == "id" || key == "picture" ? objProfile[key] = responseData[key] : key == "average_rate" ? objProfile[key] = Math.ceil(responseData[key]) : "");
 
                 setUserProfile(objProfile);
 
@@ -700,15 +750,14 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
     // WEBSOCKET //
 
-    const socket = new WebSocket("ws://localhost:8887");
+    const [socket, setSocket] = useState<any>(new WebSocket("ws://localhost:8887"));
 
     useEffect(() => {
 
-        /*socket.onopen = event => {
-            socket.send("Connection established");
-        };*/
+        setSocket(new WebSocket("ws://localhost:8887"));
+
           
-        socket.onmessage = event => {
+        socket.onmessage = (event: {data: string}) => {
 
             try {
                 const data = JSON.parse(event.data);
@@ -724,8 +773,18 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             }
         };
 
-        return () => socket.close();
-    });
+
+
+
+        return () => {
+            
+            if (socket.readyState == 1) {
+
+                socket.close();
+            }
+            
+        }
+    }, []);
 
     //
 
@@ -853,14 +912,30 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
                                                 {getUserProfile !== undefined ?
 
                                                 <div className="ul--list--registered--users--race--li--profile--wrap--details">
+
+                                                    {getUserProfile.picture !== null &&
+
+                                                        <div className="ul--list--registered--users--race--li--profile--div--img--user">
+                                                            <Image
+                                                                className="ul--list--registered--users--race--li--profile--img--user"
+                                                                height={15}
+                                                                width={15}
+                                                                alt="user-picture"
+                                                                src={`http://localhost:8080/uploads/${getUserProfile.picture}`}
+                                                            />
+                                                        </div>
+                                                    }
+
                                                     <div className="ul--list--registered--users--race--li--profile--wrap--element">
                                                         <span className="ul--list--registered--users--race--li--profile--span--title">Edad: </span>
                                                         <span className="ul--list--registered--users--race--li--profile--age">{getUserProfile.age}</span>
                                                     </div>
+
                                                     <div className="ul--list--registered--users--race--li--profile--wrap--element">
                                                         <span className="ul--list--registered--users--race--li--profile--span--title">Ciudad: </span>
                                                         <span className="ul--list--registered--users--race--li--profile--city">{getUserProfile.city}</span>
                                                     </div>
+
                                                 </div>
 
                                                 :
@@ -1148,7 +1223,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
                         :
 
-                        <button className="main--div--register--form--button--submit button--submit--participate" type="button" name="main--div--register--form--button--submit" onClick={(e) => handleClickParticipateRace(e, parseInt(params.race_id))}>Participar</button>
+                        <button className="main--div--register--form--button--submit button--submit--participate" type="button" name="main--div--register--form--button--submit" onClick={(e) => handleClickParticipateRace(e, parseInt(params.race_id), getSpecificRace.race_date, getSpecificRace.race_time)}>Participar</button>
 
                         
                 }

@@ -187,6 +187,7 @@ export default function RootLayout({ children, }: {children: React.ReactNode}) {
         sessionStorage.setItem("lastActivity", new Date().toString());
 
         document.addEventListener("mousemove", timerSet);
+        document.addEventListener("touchend", timerSet);
 
         intervalTimer = setInterval(() => {
 
@@ -206,6 +207,7 @@ export default function RootLayout({ children, }: {children: React.ReactNode}) {
       if (getUserData.email.length == 0) {
 
         document.removeEventListener("mousemove", timerSet);
+        document.removeEventListener("touchend", timerSet);
         clearInterval(intervalTimer);
       }
     }

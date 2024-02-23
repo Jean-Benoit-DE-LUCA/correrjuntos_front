@@ -63,6 +63,8 @@ export default function FindRaces() {
     const handleSearchRaces = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
+
+        const idRace = (document.getElementsByClassName("main--div--register--form--input--id--race")[0] as HTMLInputElement);
         
         const city = (document.getElementsByClassName("main--div--register--form--input--city")[0] as HTMLInputElement);
         const user = (document.getElementsByClassName("main--div--register--form--input--user")[0] as HTMLInputElement);
@@ -76,6 +78,14 @@ export default function FindRaces() {
         const allHoursCheckBox = (document.getElementById("main--div--register--form--input--every--date--second--checkbox") as HTMLInputElement);
 
 
+        const divError = (document.getElementsByClassName("error--div")[0] as HTMLDivElement);
+        const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
+
+
+
+        const divResultRaces = (document.getElementsByClassName("main--div my--races")[0] as HTMLDivElement);
+
+        console.log(idRace.value);
         console.log(city.value);
         console.log(user.value);
         console.log(dateStart.value);
@@ -85,36 +95,112 @@ export default function FindRaces() {
         console.log(hourEnd.value);
         console.log(allHoursCheckBox.checked);
 
-        const response = await fetch(`http://localhost:8080/api/race/search`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-                "Authorization": userContext.jwt
-            },
-            body: JSON.stringify({
-                cityToSearch: city.value,
-                userToSearch: user.value,
-                dateStart: dateStart.value,
-                dateEnd: dateEnd.value,
-                allDatesCheck: allDatesCheckBox.checked,
-                hourStart: hourStart.value,
-                hourEnd: hourEnd.value,
-                allHoursCheck: allHoursCheckBox.checked
-            })
-        });
+        // reset list races //
 
-        const responseData = await response.json();
+        setFetchRaces([]);
 
-        if (Object.keys(responseData).length > 0) {
 
-            const arrayFetchRaces = [];
 
-            for (let i = 0; i < Object.keys(responseData).length; i++) {
 
-                arrayFetchRaces.push(responseData[i]);
+
+        // if race number typed //
+
+
+        if (idRace.value.length > 0) {
+
+            const response = await fetch(`http://localhost:8080/api/race/search`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": userContext.jwt
+                },
+                body: JSON.stringify({
+                    race_id: idRace.value
+                })
+            });
+
+            const responseData = await response.json();
+
+            console.log(responseData);
+
+            if (responseData.hasOwnProperty("error")) {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+    
+                document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                divErrorPelement.textContent = `Carrera #${idRace.value} no encontrada.`;
+                divError.classList.add("active");
+    
+                setTimeout(() => {
+                    divError.classList.remove("active");
+                }, 3000);
             }
 
-            setFetchRaces(arrayFetchRaces);
+            else {
+
+                const arrayFetchRaces = [];
+    
+                for (let i = 0; i < Object.keys(responseData).length; i++) {
+
+                    arrayFetchRaces.push(responseData[i]);
+                }
+
+                setFetchRaces(arrayFetchRaces);
+                
+                window.scrollTo({
+                    top: divResultRaces.offsetTop,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+
+
+        // get list races //
+
+        else if (idRace.value.length == 0) {
+
+            const response = await fetch(`http://localhost:8080/api/race/search`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": userContext.jwt
+                },
+                body: JSON.stringify({
+                    cityToSearch: city.value,
+                    userToSearch: user.value,
+                    dateStart: dateStart.value,
+                    dateEnd: dateEnd.value,
+                    allDatesCheck: allDatesCheckBox.checked,
+                    hourStart: hourStart.value,
+                    hourEnd: hourEnd.value,
+                    allHoursCheck: allHoursCheckBox.checked
+                })
+            });
+
+            const responseData = await response.json();
+
+            console.log(responseData);
+
+            if (Object.keys(responseData).length > 0) {
+
+                const arrayFetchRaces = [];
+
+                for (let i = 0; i < Object.keys(responseData).length; i++) {
+
+                    arrayFetchRaces.push(responseData[i]);
+                }
+
+                setFetchRaces(arrayFetchRaces);
+
+                window.scrollTo({
+                    top: divResultRaces.offsetTop,
+                    behavior: "smooth"
+                });
+            }
         }
     };
 
@@ -132,11 +218,27 @@ export default function FindRaces() {
             <h2 className="main--h2">Encuentra una carrera</h2>
 
             <div className="main--div main--div--findrunners">
+
+                <div className="error--div find">
+                    <p className="error--div--p">
+
+                    </p>
+                </div>
+
                 <p className="main--div--p">
                     Haz tu búsqueda y recorre kilómetros!
                 </p>
 
                 <form className="main--form--findrunners" method="POST" onSubmit={handleSearchRaces}>
+
+                    <div className="main--div--register--form--wrap--label--input">
+                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--id--race">
+                            Por número de carrera:
+                        </label>
+                        <input className="main--div--register--form--input--id--race" type="number" name="main--div--register--form--input--id--race" id="main--div--register--form--input--id--race" />
+                    </div>
+
+                    <span className="span--between">or</span>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
@@ -238,6 +340,8 @@ export default function FindRaces() {
                         <Link key={ind} href={`/races/${elem.races_id}`} className={`main--div--ul--last--races--anchor ${elem.races_race_level == "bajo" ? "low--level" : elem.races_race_level == "medio" ? "mid--level" : elem.races_race_level == "alto" ? "high--level" : ""}`}>
 
                             <li className="main--div--ul--last--races--li">
+
+                                <span className="main--div--ul--last--races--li--id--race">{elem.races_id}</span>
 
                                 <span className="main--div--ul--last--races--span--city">{elem.races_city}</span>
 

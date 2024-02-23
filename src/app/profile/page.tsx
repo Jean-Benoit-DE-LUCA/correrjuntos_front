@@ -33,6 +33,7 @@ export default function Profile() {
 
 
 
+
     const [fetchReviews, setFetchReviews] = useState<Array<any>>([]);
     // FETCH REVIEWS BY USER //
 
@@ -338,7 +339,35 @@ export default function Profile() {
 
     // CONFIRM DELETE REVIEW //
 
-    
+    const handleClickConfirmDeleteReview = async (e: React.MouseEvent, review_id: number) => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const liParentElement = e.currentTarget.parentElement?.parentElement?.parentElement?.parentElement?.parentElement;
+
+        liParentElement?.classList.add("remove");
+
+        setTimeout(() => {
+
+            liParentElement?.remove();
+        }, 600);
+
+        //
+
+        const response = await fetch(`http://localhost:8080/api/review/delete/${review_id}/email/${userContext.getUserData.email}`, {
+
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": userContext.jwt
+            }
+        });
+
+        const responseData = await response.json();
+
+        console.log(responseData);
+    };
 
 
 
@@ -368,6 +397,11 @@ export default function Profile() {
 
         userContext.setUserDataFunction(getUser, userContext.getUserData);
         fetchReviewsByUserId(userContext.getUserData.id);
+    }, []);
+
+    useEffect(() => {
+
+        utilsContext.setBackButton(window.location.pathname);
     }, []);
 
 
@@ -469,10 +503,10 @@ export default function Profile() {
                             Género*:
                         </label>
 
-                        <select className="main--div--register--form--select--gender" name="main--div--register--form--select--gender" id="main--div--register--form--select--gender" onChange={(e) => handleChangeInput(e, "gender")}>
+                        <select className="main--div--register--form--select--gender" name="main--div--register--form--select--gender" id="main--div--register--form--select--gender" value={getUser.gender} onChange={(e) => handleChangeInput(e, "gender")}>
                             
-                            <option value="male" selected={getUser.gender == "male" ? true : false}>Hombre</option>
-                            <option value="female" selected={getUser.gender == "female" ? true : false}>Mujer</option>
+                            <option value="male" >Hombre</option>
+                            <option value="female" >Mujer</option>
 
                         </select>
                     </div>
@@ -488,7 +522,7 @@ export default function Profile() {
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
                             Número de calle:
                         </label>
-                        <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getUser.streetNumber == -1 ? "" : getUser.streetNumber} onChange={(e) => handleChangeInput(e, "streetNumber")}/* not required *//>
+                        <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getUser.streetNumber == -1 || Number.isNaN(getUser.streetNumber) ? "" : getUser.streetNumber} onChange={(e) => handleChangeInput(e, "streetNumber")}/* not required *//>
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
@@ -502,7 +536,7 @@ export default function Profile() {
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--zip--code">
                             Código postal*:
                         </label>
-                        <input className="main--div--register--form--input--zip--code" type="number" name="main--div--register--form--input--zip--code" id="main--div--register--form--input--zip--code" value={getUser.zipCode} onChange={(e) => handleChangeInput(e, "zipCode")}/>
+                        <input className="main--div--register--form--input--zip--code" type="number" name="main--div--register--form--input--zip--code" id="main--div--register--form--input--zip--code" value={Number.isNaN(getUser.zipCode) ? "" : getUser.zipCode} onChange={(e) => handleChangeInput(e, "zipCode")}/>
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
@@ -516,14 +550,14 @@ export default function Profile() {
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password">
                             Contraseña*:
                         </label>
-                        <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" onChange={(e) => handleChangeInput(e, "password")}/>
+                        <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" autoComplete="off" onChange={(e) => handleChangeInput(e, "password")}/>
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password--confirm">
                             Confirmar contraseña*:
                         </label>
-                        <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" />
+                        <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" autoComplete="off"/>
                     </div>
 
                     <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar
@@ -550,9 +584,9 @@ export default function Profile() {
 
                 <ul className="profile--review--ul">
                     
-                    {Object.keys(fetchReviews).map(elem => 
+                    {Object.keys(fetchReviews).map((elem, ind) => 
                         
-                       <li className="profile--review--ul--li">
+                       <li className="profile--review--ul--li" key={ind}>
 
                             <button className="profile--review--ul--li--button--delete" name="profile--review--ul--li--button--delete" type="button" onClick={(e) => handleClickDeleteReview(e, (fetchReviews as any)[elem].review_id)}>
                                 <div className="profile--review--ul--li--button--delete--div--wrap">
@@ -562,7 +596,7 @@ export default function Profile() {
                                         <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
 
                                         <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
-                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes">Sí</span>
+                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes" onClick={(e) => handleClickConfirmDeleteReview(e, (fetchReviews as any)[elem].review_id)}>Sí</span>
                                             <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
                                         </div>
                                     </div>

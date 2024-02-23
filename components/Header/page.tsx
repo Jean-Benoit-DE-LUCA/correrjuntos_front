@@ -47,7 +47,7 @@ export default function Header(props: any) {
             /*const main = (document.getElementsByClassName("main")[0] as HTMLElement);
             const anchorNav = (document.getElementsByClassName("nav--ul--anchor") as HTMLCollectionOf<HTMLAnchorElement>);*/
 
-            e.currentTarget.classList.contains("active") ? main.classList.add("active") : main.classList.remove("active");
+            e.currentTarget.classList.contains("active") ? main.classList.add("active") : setTimeout(() => main.classList.remove("active"), 200);
             
             if (e.currentTarget.classList.contains("active")) {
 
@@ -90,6 +90,7 @@ export default function Header(props: any) {
             Array.from(anchorLinks).forEach( elem => elem.classList.remove("active"));
 
             mainElement.classList.remove("active");
+            
         }
     }
 

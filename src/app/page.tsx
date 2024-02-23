@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,92 @@ import Image from "next/image";
 import { RaceInterface, UserContext, UtilsContext } from "./layout";
 import BackButton from "../../components/BackButton/page";
 
+import runnerIcon from "../../public/assets/pictures/runner-icon.svg";
+import quoteImg from "../../public/assets/pictures/quote.svg";
+import arrowLeftCarousel from "../../public/assets/pictures/arrow-left-carousel.svg";
+import arrowRightCarousel from "../../public/assets/pictures/arrow-right-carousel.svg";
+
+
+import testimonial_0 from "../../public/assets/pictures/testimonial_0.jpg";
+import testimonial_1 from "../../public/assets/pictures/testimonial_1.jpg";
+import testimonial_2 from "../../public/assets/pictures/testimonial_2.jpg";
+
 export default function App() {
+
+  const [dataTestimonial, setDataTestimonial] = useState({
+    "0": {
+      picture: testimonial_0,
+      name: "Juan Martínez",
+      title: "Estudiante",
+      content: "¡Una experiencia increíble! Participé en una de las carreras organizadas por el sitio y quedé impresionado por el ambiente de camaradería y apoyo mutuo entre los corredores."
+    },
+
+    "1": {
+      picture: testimonial_1,
+      name: "Andrea López",
+      title: "Secretaria",
+      content: "Quiero agradecer al equipo detrás de este sitio por crear un espacio donde los corredores pueden unirse, compartir experiencias y motivarse mutuamente. Desde que me uní, he encontrado amigos que comparten mi amor por correr y juntos hemos alcanzado metas que nunca pensé posibles."
+    },
+
+    "2": {
+      picture: testimonial_2,
+      name: "Carlos Sánchez",
+      title: "Profesor de Educación Física",
+      content: "Como profesor de educación física, siempre estoy buscando formas de motivar a mis alumnos a mantenerse activos. Este sitio ha sido una herramienta para conectar con otros amantes del running y compartir experiencias inspiradoras."
+    },
+  });
+
+
+
+  const handleClickArrowCarousel = (e: SyntheticEvent, direction: string) => {
+
+    const divUserElement = (document.getElementsByClassName("testimonials--div--carousel--user--div") as HTMLCollectionOf<HTMLDivElement>);
+
+    if (direction == "right") {
+
+      for (let i = 0; i < divUserElement.length; i++) {
+
+        if (divUserElement[i].classList.contains("active")) {
+
+          if (divUserElement[i+1] !== undefined) {
+
+            divUserElement[i].classList.remove("active");
+            divUserElement[i].classList.add("active_left");
+
+            divUserElement[i+1].classList.add("active");
+
+            break;
+          }
+        }
+      }
+    }
+
+
+    if (direction == "left") {
+
+      for (let i = 0; i < divUserElement.length; i++) {
+
+        if (divUserElement[i].classList.contains("active")) {
+
+          if (i !== 0) {
+
+            divUserElement[i].classList.remove("active");
+            divUserElement[i].classList.remove("active_left");
+
+            divUserElement[i-1].classList.remove("active_left");
+            divUserElement[i-1].classList.add("active");
+            break;
+          }
+        }
+      }
+    }
+  };
+
+
+
+
+
+
 
   const [messageTrueFalse, setMessageTrueFalse] = useState<boolean>(false);
 
@@ -93,13 +178,17 @@ export default function App() {
 
             if (entry.isIntersecting) {
 
-                entry.target.classList.add("scroll--animation--active");
+                if (entry.target.className == "welcome--text--span") {
+
+                  entry.target.classList.add("active");
+                }
+
+                else {
+
+                  entry.target.classList.add("scroll--animation--active");
+                }
             }
 
-            else {
-
-                entry.target.classList.remove("scroll--animation--active");
-            }
         });
 
 
@@ -115,6 +204,7 @@ export default function App() {
     fetchLastRaces();
     observerFunction("scroll--animation--left");
     observerFunction("scroll--animation--right");
+    observerFunction("welcome--text--span");
 
     userContext.message.length > 0 ? setMessageTrueFalse(true) : setMessageTrueFalse(false);
 
@@ -131,6 +221,17 @@ export default function App() {
     if (getLastRaces !== undefined) {
       console.log(getLastRaces);
     }
+  }, []);
+
+
+
+
+  // set active to first testimonial //
+
+  useEffect(() => {
+    const divUserElement = (document.getElementsByClassName("testimonials--div--carousel--user--div") as HTMLCollectionOf<HTMLDivElement>);
+
+    divUserElement[0].classList.add("active");
   }, []);
 
 console.log(getLastRaces);
@@ -158,13 +259,13 @@ console.log(getLastRaces);
         </div>
       }
       <div className="main--div--video--title--wrap">
-        <div className="main--div--video--title">
+        <div className="main--div--video--title" onMouseOver={handleMouseOverDivVideo} onTouchEnd={handleMouseOverDivVideo}>
             <span className="main--div--video--title--span--one">¿Correr solo?</span>
             <span className="main--div--video--title--span--two">¡No!</span>
         </div>
       </div>
 
-      <div className="main--div--video" onMouseOver={handleMouseOverDivVideo} onTouchEnd={handleMouseOverDivVideo}>
+      <div className="main--div--video">
         
         <video className="main--div--video--video" autoPlay muted loop>
           <source className="main--div--video--video--source" src="http://localhost:8080/videos/runner_beach.mp4" type="video/mp4" />
@@ -262,6 +363,50 @@ console.log(getLastRaces);
         }
         </ul>
       </div>
+
+      <div className="main--div--welcome--text">
+
+        <p className="welcome--text">
+          <span className="welcome--text--span">
+            <Image
+              className="runner--icon--img right"
+              src={runnerIcon}
+              alt="runner-icon"
+              height={25}
+              width={25}
+            />
+            ¿Estás listo para sentir la adrenalina de correr en grupo? En nuestro sitio, nos encargamos de reunir a los amantes del running para que disfruten de su pasión juntos. Porque correr es más divertido cuando lo haces en compañía, ¿no crees?
+          </span>
+
+          <span className="welcome--text--span">
+            <Image
+              className="runner--icon--img left"
+              src={runnerIcon}
+              alt="runner-icon"
+              height={25}
+              width={25}
+            />
+            Así que despreocúpate y únete a nosotros para correr sin preocupaciones. Además, ¿qué mejor manera de mantenernos activos y en forma que compartir kilómetros con amigos?
+          </span>
+
+          <span className="welcome--text--span">
+            <Image
+              className="runner--icon--img right"
+              src={runnerIcon}
+              alt="runner-icon"
+              height={25}
+              width={25}
+            />
+            Así que, ¿a qué esperas? Únete a nuestra comunidad y prepárate para correr, sudar y reír juntos en cada paso del camino. ¡Nos vemos en la pista!
+          </span>
+        </p>
+
+
+      </div>
+
+
+
+
       <div className="main--div--picture--wrap">
         <div className="main--div--picture scroll--animation--left">
 
@@ -309,6 +454,85 @@ console.log(getLastRaces);
 
         </div>
       </div>
+
+
+      <section className="testimonials--section">
+
+        <h2 className="testimonials--title">Testimonios</h2>
+
+        <div className="testimonials--div--carousel--wrap">
+
+          
+
+            <div className="testimonials--div--carousel">
+
+              <Image
+                className="testimonials--img--quote"
+                src={quoteImg}
+                alt="quote-image"
+                height={30}
+                width={30}
+              />
+              <Image
+                className="testimonials--img--arrow--left"
+                src={arrowLeftCarousel}
+                alt="img-arrow-left"
+                height={0}
+                width={0}
+                onClick={(e) => handleClickArrowCarousel(e, "left")}
+              />
+              <Image
+                className="testimonials--img--arrow--right"
+                src={arrowRightCarousel}
+                alt="img-arrow-right"
+                height={0}
+                width={0}
+                onClick={(e) => handleClickArrowCarousel(e, "right")}
+              />
+
+              <div className="testimonials--div--carousel--user--div--wrap--wrap">
+
+                <div className="testimonials--div--carousel--user--div--wrap">
+
+
+                  {Object.keys(dataTestimonial).map( (elem, ind) =>
+                    <div className="testimonials--div--carousel--user--div" key={ind}>
+
+                        <div className="testimonials--div--carousel--user--div--img--div">
+                          <Image
+                            className="testimonials--img--user"
+                            src={(dataTestimonial as any)[elem].picture}
+                            alt="img-user-testimonial"
+                            height={0}
+                            width={0}
+                          />
+                        </div>
+
+                        <div className="testimonials--div--wrap--details">
+                          <span className="testimonials--span--name">{(dataTestimonial as any)[elem].name}</span>
+
+                          <span className="testimonials--span--title">{(dataTestimonial as any)[elem].title}</span>
+
+                          <div className="testimonials--div--content">
+
+                            <p className="testimonials--div--content--p">
+                              {(dataTestimonial as any)[elem].content}
+                            </p>
+
+                          </div>
+                        </div>
+
+                    </div>
+                  )}
+                </div>
+
+              </div>
+              
+            </div>
+          
+        </div>
+
+      </section>
     </main>
   );
 }

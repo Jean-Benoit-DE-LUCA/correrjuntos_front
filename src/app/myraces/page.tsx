@@ -87,6 +87,8 @@ export default function MyRaces() {
 
                             <li className="main--div--ul--last--races--li">
 
+                                <span className="main--div--ul--last--races--li--id--race">{(getRacesByUser as any)[elem].id}</span>
+
                                 <span className="main--div--ul--last--races--span--city">{(getRacesByUser as any)[elem].city}</span>
 
                                 <div className="main--div--ul--last--races--date--time--wrap">

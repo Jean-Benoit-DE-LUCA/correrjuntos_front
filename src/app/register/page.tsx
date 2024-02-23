@@ -262,14 +262,14 @@ export default function Register() {
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password">
                             Contraseña*:
                         </label>
-                        <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" />
+                        <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" autoComplete="off"/>
                     </div>
 
                     <div className="main--div--register--form--wrap--label--input">
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password--confirm">
                             Confirmar contraseña*:
                         </label>
-                        <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" />
+                        <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" autoComplete="off"/>
                     </div>
 
                     <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar

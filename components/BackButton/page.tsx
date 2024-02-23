@@ -7,6 +7,7 @@ import Image from "next/image";
 export default function BackButton({pathname}: {pathname: string}) {
 
     const router = useRouter();
+    console.log(pathname);
 
     if (pathname !== "/") {
 
