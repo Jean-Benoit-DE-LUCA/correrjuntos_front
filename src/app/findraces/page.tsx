@@ -2,7 +2,7 @@
 
 import { Fragment, useContext, useEffect, useState } from "react";
 import BackButton from "../../../components/BackButton/page";
-import { RaceInterface, UserContext, UtilsContext } from "../layout";
+import { RaceInterface, UserContext, UtilsContext } from "../container";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -337,7 +337,7 @@ export default function FindRaces() {
 
                     fetchRaces.map( (elem: any, ind: number) =>
 
-                        <Link key={ind} href={`/races/${elem.races_id}`} className={`main--div--ul--last--races--anchor ${elem.races_race_level == "bajo" ? "low--level" : elem.races_race_level == "medio" ? "mid--level" : elem.races_race_level == "alto" ? "high--level" : ""}`}>
+                        <Link key={ind} href={`/races/${elem.races_id}`} className={`main--div--ul--last--races--anchor active ${elem.races_race_level == "bajo" ? "low--level" : elem.races_race_level == "medio" ? "mid--level" : elem.races_race_level == "alto" ? "high--level" : ""}`}>
 
                             <li className="main--div--ul--last--races--li">
 
@@ -373,7 +373,7 @@ export default function FindRaces() {
                                     { elem.races_only_male == "yes" ?
 
                                         <Image
-                                        className="male-icon"
+                                        className="male--icon"
                                         alt="male-icon"
                                         src="../assets/pictures/male-icon.svg"
                                         width={15}
@@ -383,7 +383,7 @@ export default function FindRaces() {
                                     : elem.races_only_female == "yes" ?
 
                                         <Image
-                                        className="male-icon"
+                                        className="male--icon"
                                         alt="male-icon"
                                         src="../assets/pictures/female-icon.svg"
                                         width={15}

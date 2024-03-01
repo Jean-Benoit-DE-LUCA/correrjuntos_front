@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 
 import BackButton from "../../../components/BackButton/page";
 
-import { UserContext, UtilsContext } from "../layout";
+import { UserContext, UtilsContext } from "../container";
 
 
 
@@ -104,7 +104,7 @@ export default function Contact() {
 
         <BackButton pathname={utilsContext.backButton}/>
 
-            <h2 className="main--h2 contact">Si tienes alguna pregunta, no dudes en contactarnos</h2>
+            <h2 className=" contact">Si tienes alguna pregunta, no dudes en contactarnos</h2>
             
             <div className="main--div main--div--register">
 

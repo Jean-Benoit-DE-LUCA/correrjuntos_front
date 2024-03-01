@@ -1,10 +1,11 @@
 "use client";
 
-import { UserContext, UtilsContext } from "@/app/layout";
+import { UserContext, UtilsContext } from "../../../container";
 import BackButton from "../../../../../components/BackButton/page";
 import { useContext, Fragment, useState, useEffect } from "react";
 import { SpecificRaceInterface } from "../../[race_id]/page";
 import { useRouter } from "next/navigation";
+import Loader from "../../../../../components/Loader/page";
 
 export default function UpdateRace({params}: {params: {race_id: string}}) {
 
@@ -242,6 +243,13 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
         }
     };
 
+
+
+
+
+
+
+
     const handleCheckedNoLimitInput = (e: React.FormEvent<HTMLInputElement>) => {
 
         const inputMaxUsers = (document.getElementsByClassName("main--div--register--form--input--hour--start maximum--users")[0] as HTMLInputElement);
@@ -249,25 +257,42 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
         e.currentTarget.checked ? (inputMaxUsers.classList.add("active"), inputMaxUsers.value = "") : inputMaxUsers.classList.remove("active");
     };
 
+
+
+
+
+
+
+
     const checkInput = () => {
 
         const inputCheckBoxNoLimit = (document.getElementsByClassName("main--form--findrunners--undefined--checkbox")[0] as HTMLInputElement);
 
         const inputMaxUsers = (document.getElementsByClassName("main--div--register--form--input--hour--start maximum--users")[0] as HTMLInputElement);
 
-        if (getSpecificRace.number_users == -1) {
 
-            inputCheckBoxNoLimit.checked = true;
-            inputMaxUsers.classList.add("active");
-        }
 
-        else {
+        if (inputCheckBoxNoLimit !== undefined) {
 
-            inputCheckBoxNoLimit.checked = false;
-            inputMaxUsers.classList.remove("active");
-            inputMaxUsers.value = getSpecificRace.number_users.toString();
+            if (getSpecificRace.number_users == -1) {
+
+                inputCheckBoxNoLimit.checked = true;
+                inputMaxUsers.classList.add("active");
+            }
+
+            else {
+
+                inputCheckBoxNoLimit.checked = false;
+                inputMaxUsers.classList.remove("active");
+                inputMaxUsers.value = getSpecificRace.number_users.toString();
+            }
         }
     };
+
+
+
+
+
 
     const [isCheckedMale, setIsCheckedMale] = useState<boolean>(false);
     const [isCheckedFemale, setIsCheckedFemale] = useState<boolean>(false);
@@ -294,6 +319,10 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
     };
 
 
+
+
+
+
     const handleCheckedMaleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         setIsCheckedMale(isCheckedMale => !isCheckedMale);
@@ -304,12 +333,14 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
         setIsCheckedFemale(isCheckedFemale => !isCheckedFemale);
     };
 
-    
 
-    useEffect(() => {
-        fetchRaceId(parseInt(params.race_id));
-        
-    }, []);
+
+
+
+
+
+
+
 
     useEffect(() => {
 
@@ -327,343 +358,397 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
 
     console.log(getSpecificRace);
 
-    return (
-        <main className="main">
 
-            <BackButton pathname={utilsContext.backButton}/>
 
-            <div className="error--div error--div--proposerace">
-                <p className="error--div--p">
 
-                </p>
-            </div>
 
-            <div className="main--div main--div--register main--div--proposerace">
 
-                <h2 className="main--div--register--title main--div--proposerace--title">
-                    Modificar una carrera
-                </h2>
 
-                <form className="main--div--form--proposerace" name="main--div--form--proposerace" method="POST" onSubmit={handleSubmitUpdateRace}>
-                    
-                    <fieldset className="main--div--form--fieldset">
-                        <legend className="main--div--form--proposerace--where">Dónde</legend>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
-                                Número de calle:
-                            </label>
-                            <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getSpecificRace.number_street == -1 || isNaN(getSpecificRace.number_street) ? "" : getSpecificRace.number_street} onChange={(e) => setSpecificRaceFunc(e, "number_street", e.target.value)}/* not required *//>
-                        </div>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
-                                Nombre de calle *:
-                            </label>
-                            <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name"  value={getSpecificRace.name_street} onChange={(e) => setSpecificRaceFunc(e, "name_street", e.target.value)}/>
-                        </div>
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
-                                Ciudad *:
-                            </label>
-                            <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" value={getSpecificRace.city} onChange={(e) => setSpecificRaceFunc(e, "city", e.target.value)}/>
-                        </div>
+    useEffect(() => {
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--proposerace--form--textarea--furthersdetails">
-                                Información adicional:
-                            </label>
-                            <textarea className="main--div--proposerace--form--textarea--furthersdetails" name="main--div--proposerace--form--textarea--furthersdetails" id="main--div--proposerace--form--textarea--furthersdetails" placeholder="Añade información que consideres relevante" value={getSpecificRace.further_details} onChange={(e) => setSpecificRaceFunc(e, "further_details", e.target.value)}></textarea>
-                        </div>
-                    </fieldset>
+        setTimeout(() => {
 
-                    <fieldset className="main--div--form--fieldset fieldset--when">
-                        <legend className="main--div--form--proposerace--where">Cuando</legend>
+            if (userContext.getUserData.email.length == 0) {
+                userContext.setMessage("Debes autenticarte para acceder a esta zona.");
+                router.push("/");
+            }
 
-                        <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--date">
-                            Fecha *:
-                        </label>
-                        <input className="main--div--register--form--input--date" type="date" name="main--div--register--form--input--date" id="main--div--register--form--input--date" min={new Date().toISOString().slice(0, 10)} value={getSpecificRace.race_date} onChange={(e) => setSpecificRaceFunc(e, "race_date", e.target.value)}/>
-                        </div>
+            else {
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--hour--start">
-                                Hora *:
-                            </label>
+                setIsLoading(false);
+                fetchRaceId(parseInt(params.race_id));
+            }
 
-                            <div className="main--form--findrunners--hour--box">
+        }, 1500);
+        
+    }, []);
 
-                                <select className="main--div--register--form--input--hour--start" name="main--div--register--form--input--hour--start" id="main--div--register--form--input--hour--start">
-                                    {Array.from(Array(24)).map( (elem, ind) => 
-                                        <Fragment key={ind}>
-                                            
-                                            {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '00:00' ?
 
-                                                <option value={'0' + ind + ':' + '00'} selected>{'0' + ind + ':' + '00'}</option>
 
-                                            : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '00:00' ?
 
-                                                <option value={'0' + ind + ':' + '00'}>{'0' + ind + ':' + '00'}</option>
 
+    if (isLoading) {
 
+        return <Loader />
+    }
 
-                                            : ind >= 10 && getSpecificRace.race_time == ind + ':' + '00:00' ?
+    if (!isLoading) {
 
-                                                <option value={ind + ':' + '00'} selected>{ind + ':' + '00'}</option>
+        return (
+            <main className="main">
 
-                                            : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '00:00' ? 
-                                            
-                                                <option value={ind + ':' + '00'}>{ind + ':' + '00'}</option>
+                <BackButton pathname={utilsContext.backButton}/>
 
-                                            :
-                                                <>
-                                                </>
-                                            }
+                <div className="error--div error--div--proposerace">
+                    <p className="error--div--p">
 
+                    </p>
+                </div>
 
-                                            {/**/}
+                <div className="main--div main--div--register main--div--proposerace">
 
+                    <h2 className="main--div--register--title main--div--proposerace--title">
+                        Modificar una carrera
+                    </h2>
 
-                                            {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '15:00' ?
-
-                                                <option value={'0' + ind + ':' + '15'} selected>{'0' + ind + ':' + '15'}</option>
-
-                                            : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '15:00' ?
-
-                                                <option value={'0' + ind + ':' + '15'}>{'0' + ind + ':' + '15'}</option>
-
-
-
-                                            : ind >= 10 && getSpecificRace.race_time == ind + ':' + '15:00' ?
-
-                                                <option value={ind + ':' + '15'} selected>{ind + ':' + '15'}</option>
-
-                                            : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '15:00' ? 
-                                            
-                                                <option value={ind + ':' + '15'}>{ind + ':' + '15'}</option>
-
-                                            :
-                                                <>
-                                                </>
-                                            }
-
-
-                                            {/**/}
-
-
-                                            {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '30:00' ?
-
-                                                <option value={'0' + ind + ':' + '30'} selected>{'0' + ind + ':' + '30'}</option>
-
-                                            : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '30:00' ?
-
-                                                <option value={'0' + ind + ':' + '30'}>{'0' + ind + ':' + '30'}</option>
-
-
-
-                                            : ind >= 10 && getSpecificRace.race_time == ind + ':' + '30:00' ?
-
-                                                <option value={ind + ':' + '30'} selected>{ind + ':' + '30'}</option>
-
-                                            : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '30:00' ? 
-                                            
-                                                <option value={ind + ':' + '30'}>{ind + ':' + '30'}</option>
-
-                                            :
-                                                <>
-                                                </>
-                                            }
-
-
-                                            {/**/}
-
-
-                                            {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '45:00' ?
-
-                                                <option value={'0' + ind + ':' + '45'} selected>{'0' + ind + ':' + '45'}</option>
-
-                                            : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '45:00' ?
-
-                                                <option value={'0' + ind + ':' + '45'}>{'0' + ind + ':' + '45'}</option>
-
-
-
-                                            : ind >= 10 && getSpecificRace.race_time == ind + ':' + '45:00' ?
-
-                                                <option value={ind + ':' + '45'} selected>{ind + ':' + '45'}</option>
-
-                                            : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '45:00' ? 
-                                            
-                                                <option value={ind + ':' + '45'}>{ind + ':' + '45'}</option>
-
-                                            :
-                                                <>
-                                                </>
-                                            }
-
-                                        </Fragment>
-                                    )}
-
-                                </select>
-
-                            </div>
-                        </div>
-
-                    </fieldset>
-
-                    <fieldset className="main--div--form--fieldset fieldset--howmany--time">
-                        <legend className="main--div--form--proposerace--where">Cuánto</legend>
-
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--racetime">
-                                Tiempo de carrera *:
-                            </label>
-
-                            <div className="main--form--findrunners--hour--box">
-
-                                <select className="main--div--register--form--input--racetime" name="main--div--register--form--input--racetime" id="main--div--register--form--input--racetime">
-                                    {Array("indefinido", "0h15", "0h30", "0h45", "1h00", "1h15", "1h30", "1h45", "2h00", ">2h00").map( (elem, ind) => 
-
-                                        getSpecificRace.race_duration == elem ?
-
-                                            <option key={elem} value={elem} selected>{elem}</option>
-
-                                            :
-                                            <option key={elem} value={elem}>{elem}</option>
-                                        
-                                    )}
-
-                                </select>
-
-                            </div>
-                        </div>
-
-                    </fieldset>
-
-                    <fieldset className="main--div--form--fieldset fieldset--race--level">
-                        <legend className="main--div--form--proposerace--where">Nivel carrera</legend>
-
-                        <div className="main--form--findrunners--hour--box">
-                            
-                            <div className="main--div--register--form--wrap--label--input">
-                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--race--level">
-                                    Nivel de la carrera *:
-                                </label>
-                                
-
-                                <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level">
-
-                                        <option value="bajo" selected={getSpecificRace.race_level == "bajo"}>Bajo</option>
-
-
-
-                                        <option value="medio" selected={getSpecificRace.race_level == "medio"}>Medio</option>
-
-
-
-                                        <option value="alto" selected={getSpecificRace.race_level == "alto"}>Alto</option>
-
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset className="main--div--form--fieldset fieldset--howmany--users update--race">
-                        <legend className="main--div--form--proposerace--where">Participantes</legend>
-
-                        <span className="max--users--update--span">
-                        Usuarios máximos: {getSpecificRace.number_users == -1 || isNaN(getSpecificRace.number_users) ? "Sin límites" : getSpecificRace.number_users}
-                            <span className="max--users--update--span">
-                                Participantes ya registrados: {Object.keys(getUsersParticipate).length}
-                            </span>
-                            <span className="max--users--update--span">
-                                (Solo se puede elegir una cifra superior o igual a los participantes ya registrados)
-                            </span>
-                        </span>
+                    <form className="main--div--form--proposerace" name="main--div--form--proposerace" method="POST" onSubmit={handleSubmitUpdateRace}>
                         
-                        <label className="main--div--register--form--label wrap--label" htmlFor="main--div--register--form--input--hour--start">
-                                Participantes 
-                                <span>máximo *:</span>
-                        </label>
+                        <fieldset className="main--div--form--fieldset">
+                            <legend className="main--div--form--proposerace--where">Dónde</legend>
 
-                        <div className="main--form--findrunners--hour--box maximum--users">
-                            
-                            <div className="main--form--findrunners--undefined--checkbox--wrap--div">
-                                <label className="main--div--register--form--label" htmlFor="main--form--findrunners--undefined--checkbox">Sin límites</label>
-                                <input className="main--form--findrunners--undefined--checkbox" type="checkbox" name="main--form--findrunners--undefined--checkbox" id="main--form--findrunners--undefined--checkbox" onChange={handleCheckedNoLimitInput}/>
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
+                                    Número de calle:
+                                </label>
+                                <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getSpecificRace.number_street == -1 || isNaN(getSpecificRace.number_street) ? "" : getSpecificRace.number_street} onChange={(e) => setSpecificRaceFunc(e, "number_street", e.target.value)}/* not required *//>
                             </div>
-                            
-                            <input className="main--div--register--form--input--hour--start maximum--users" type="number" name="main--div--register--form--input--hour--start maximum--users" id="main--div--register--form--input--hour--start maximum--users" />
 
-                        </div>
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
+                                    Nombre de calle *:
+                                </label>
+                                <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name"  value={getSpecificRace.name_street} onChange={(e) => setSpecificRaceFunc(e, "name_street", e.target.value)}/>
+                            </div>
 
-                        <div className="main--div--register--form--wrap--label--input">
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
+                                    Ciudad *:
+                                </label>
+                                <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" value={getSpecificRace.city} onChange={(e) => setSpecificRaceFunc(e, "city", e.target.value)}/>
+                            </div>
 
-                            {   getSpecificRace.only_male == "yes" ?
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--proposerace--form--textarea--furthersdetails">
+                                    Información adicional:
+                                </label>
+                                <textarea className="main--div--proposerace--form--textarea--furthersdetails" name="main--div--proposerace--form--textarea--furthersdetails" id="main--div--proposerace--form--textarea--furthersdetails" placeholder="Añade información que consideres relevante" value={getSpecificRace.further_details} onChange={(e) => setSpecificRaceFunc(e, "further_details", e.target.value)}></textarea>
+                            </div>
+                        </fieldset>
 
-                                <>
-                                <div className="main--form--findrunners--checkbox--male--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
-                                            ¿Solo chicos?: 
-                                    </label>
-                                    <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
+                        <fieldset className="main--div--form--fieldset fieldset--when">
+                            <legend className="main--div--form--proposerace--where">Cuando</legend>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--date">
+                                Fecha *:
+                            </label>
+                            <input className="main--div--register--form--input--date" type="date" name="main--div--register--form--input--date" id="main--div--register--form--input--date" min={new Date().toISOString().slice(0, 10)} value={getSpecificRace.race_date} onChange={(e) => setSpecificRaceFunc(e, "race_date", e.target.value)}/>
+                            </div>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--hour--start">
+                                    Hora *:
+                                </label>
+
+                                <div className="main--form--findrunners--hour--box">
+
+                                    <select className="main--div--register--form--input--hour--start" name="main--div--register--form--input--hour--start" id="main--div--register--form--input--hour--start">
+                                        {Array.from(Array(24)).map( (elem, ind) => 
+                                            <Fragment key={ind}>
+                                                
+                                                {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '00:00' ?
+
+                                                    <option value={'0' + ind + ':' + '00'} selected>{'0' + ind + ':' + '00'}</option>
+
+                                                : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '00:00' ?
+
+                                                    <option value={'0' + ind + ':' + '00'}>{'0' + ind + ':' + '00'}</option>
+
+
+
+                                                : ind >= 10 && getSpecificRace.race_time == ind + ':' + '00:00' ?
+
+                                                    <option value={ind + ':' + '00'} selected>{ind + ':' + '00'}</option>
+
+                                                : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '00:00' ? 
+                                                
+                                                    <option value={ind + ':' + '00'}>{ind + ':' + '00'}</option>
+
+                                                :
+                                                    <>
+                                                    </>
+                                                }
+
+
+                                                {/**/}
+
+
+                                                {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '15:00' ?
+
+                                                    <option value={'0' + ind + ':' + '15'} selected>{'0' + ind + ':' + '15'}</option>
+
+                                                : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '15:00' ?
+
+                                                    <option value={'0' + ind + ':' + '15'}>{'0' + ind + ':' + '15'}</option>
+
+
+
+                                                : ind >= 10 && getSpecificRace.race_time == ind + ':' + '15:00' ?
+
+                                                    <option value={ind + ':' + '15'} selected>{ind + ':' + '15'}</option>
+
+                                                : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '15:00' ? 
+                                                
+                                                    <option value={ind + ':' + '15'}>{ind + ':' + '15'}</option>
+
+                                                :
+                                                    <>
+                                                    </>
+                                                }
+
+
+                                                {/**/}
+
+
+                                                {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '30:00' ?
+
+                                                    <option value={'0' + ind + ':' + '30'} selected>{'0' + ind + ':' + '30'}</option>
+
+                                                : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '30:00' ?
+
+                                                    <option value={'0' + ind + ':' + '30'}>{'0' + ind + ':' + '30'}</option>
+
+
+
+                                                : ind >= 10 && getSpecificRace.race_time == ind + ':' + '30:00' ?
+
+                                                    <option value={ind + ':' + '30'} selected>{ind + ':' + '30'}</option>
+
+                                                : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '30:00' ? 
+                                                
+                                                    <option value={ind + ':' + '30'}>{ind + ':' + '30'}</option>
+
+                                                :
+                                                    <>
+                                                    </>
+                                                }
+
+
+                                                {/**/}
+
+
+                                                {ind < 10 && getSpecificRace.race_time == '0' + ind + ':' + '45:00' ?
+
+                                                    <option value={'0' + ind + ':' + '45'} selected>{'0' + ind + ':' + '45'}</option>
+
+                                                : ind < 10 && getSpecificRace.race_time !== '0' + ind + ':' + '45:00' ?
+
+                                                    <option value={'0' + ind + ':' + '45'}>{'0' + ind + ':' + '45'}</option>
+
+
+
+                                                : ind >= 10 && getSpecificRace.race_time == ind + ':' + '45:00' ?
+
+                                                    <option value={ind + ':' + '45'} selected>{ind + ':' + '45'}</option>
+
+                                                : ind >= 10 && getSpecificRace.race_time !== ind + ':' + '45:00' ? 
+                                                
+                                                    <option value={ind + ':' + '45'}>{ind + ':' + '45'}</option>
+
+                                                :
+                                                    <>
+                                                    </>
+                                                }
+
+                                            </Fragment>
+                                        )}
+
+                                    </select>
+
                                 </div>
+                            </div>
 
-                                <div className="main--form--findrunners--checkbox--female--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
-                                            ¿Solo chicas?: 
-                                    </label>
-                                    <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--howmany--time">
+                            <legend className="main--div--form--proposerace--where">Cuánto</legend>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--racetime">
+                                    Tiempo de carrera *:
+                                </label>
+
+                                <div className="main--form--findrunners--hour--box">
+
+                                    <select className="main--div--register--form--input--racetime" name="main--div--register--form--input--racetime" id="main--div--register--form--input--racetime">
+                                        {Array("indefinido", "0h15", "0h30", "0h45", "1h00", "1h15", "1h30", "1h45", "2h00", ">2h00").map( (elem, ind) => 
+
+                                            getSpecificRace.race_duration == elem ?
+
+                                                <option key={elem} value={elem} selected>{elem}</option>
+
+                                                :
+
+                                                <option key={elem} value={elem}>{elem}</option>
+                                            
+                                        )}
+
+                                    </select>
+
                                 </div>
-                                </>
+                            </div>
 
-                            :   getSpecificRace.only_female == "yes" ?
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--race--level">
+                            <legend className="main--div--form--proposerace--where">Nivel carrera</legend>
+
+                            <div className="main--form--findrunners--hour--box">
                                 
-                                <>
-                                <div className="main--form--findrunners--checkbox--male--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
-                                            ¿Solo chicos?: 
+                                <div className="main--div--register--form--wrap--label--input">
+                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--race--level">
+                                        Nivel de la carrera *:
                                     </label>
-                                    <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
-                                </div>
+                                    
 
-                                <div className="main--form--findrunners--checkbox--female--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
-                                            ¿Solo chicas?: 
-                                    </label>
-                                    <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
-                                </div>
-                                </>
+                                    <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level" id="main--div--register--form--input--race--level" defaultValue={getSpecificRace.race_level}>
 
-                            :   
+                                            {Array.from(["bajo", "medio", "alto"]).map((elem, ind) => 
 
-                                <>
-                                <div className="main--form--findrunners--checkbox--male--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
-                                            ¿Solo chicos?: 
-                                    </label>
-                                    <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
-                                </div>
+                                                getSpecificRace.race_level == elem ?
+                                                
+                                                <option key={ind} value={elem} selected>{elem.toString().charAt(0).toUpperCase() + elem.slice(1)}</option>
 
-                                <div className="main--form--findrunners--checkbox--female--wrap--div">
-                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
-                                            ¿Solo chicas?: 
-                                    </label>
-                                    <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
+                                                :
+
+                                                <option key={ind} value={elem}>{elem.toString().charAt(0).toUpperCase() + elem.slice(1)}</option>
+
+                                            )}
+
+                                            {/*<option value="bajo" selected={getSpecificRace.race_level == "bajo"}>Bajo</option>
+
+
+
+                                            <option value="medio" selected={getSpecificRace.race_level == "medio"}>Medio</option>
+
+
+
+                                            <option value="alto" selected={getSpecificRace.race_level == "alto"}>Alto</option>*/}
+
+                                    </select>
                                 </div>
-                                </>
-                            }
+                            </div>
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--howmany--users update--race">
+                            <legend className="main--div--form--proposerace--where">Participantes</legend>
+
+                            <span className="max--users--update--span">
+                            Usuarios máximos: {getSpecificRace.number_users == -1 || isNaN(getSpecificRace.number_users) ? "Sin límites" : getSpecificRace.number_users}
+                                <span className="max--users--update--span">
+                                    Participantes ya registrados: {Object.keys(getUsersParticipate).length}
+                                </span>
+                                <span className="max--users--update--span">
+                                    (Solo se puede elegir una cifra superior o igual a los participantes ya registrados)
+                                </span>
+                            </span>
                             
-                        </div>
+                            <label className="main--div--register--form--label wrap--label" htmlFor="main--div--register--form--input--hour--start">
+                                    Participantes 
+                                    <span>máximo *:</span>
+                            </label>
 
-                    </fieldset>
+                            <div className="main--form--findrunners--hour--box maximum--users">
+                                
+                                <div className="main--form--findrunners--undefined--checkbox--wrap--div">
+                                    <label className="main--div--register--form--label" htmlFor="main--form--findrunners--undefined--checkbox">Sin límites</label>
+                                    <input className="main--form--findrunners--undefined--checkbox" type="checkbox" name="main--form--findrunners--undefined--checkbox" id="main--form--findrunners--undefined--checkbox" onChange={handleCheckedNoLimitInput}/>
+                                </div>
+                                
+                                <input className="main--div--register--form--input--hour--start maximum--users" type="number" name="main--div--register--form--input--hour--start maximum--users" id="main--div--register--form--input--hour--start maximum--users" />
 
-                    <button type="submit" name="main--form--findrunners--button--submit" className="main--form--findrunners--button--submit" id="main--form--findrunners--button--submit">Modificar</button>
+                            </div>
 
-                </form>
-            </div>
-        </main>
-    );
+                            <div className="main--div--register--form--wrap--label--input">
+
+                                {   getSpecificRace.only_male == "yes" ?
+
+                                    <>
+                                    <div className="main--form--findrunners--checkbox--male--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
+                                                ¿Solo chicos?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
+                                    </div>
+
+                                    <div className="main--form--findrunners--checkbox--female--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
+                                                ¿Solo chicas?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
+                                    </div>
+                                    </>
+
+                                :   getSpecificRace.only_female == "yes" ?
+                                    
+                                    <>
+                                    <div className="main--form--findrunners--checkbox--male--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
+                                                ¿Solo chicos?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
+                                    </div>
+
+                                    <div className="main--form--findrunners--checkbox--female--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
+                                                ¿Solo chicas?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
+                                    </div>
+                                    </>
+
+                                :   
+
+                                    <>
+                                    <div className="main--form--findrunners--checkbox--male--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
+                                                ¿Solo chicos?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" checked={isCheckedMale} onChange={handleCheckedMaleInput}/>
+                                    </div>
+
+                                    <div className="main--form--findrunners--checkbox--female--wrap--div">
+                                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
+                                                ¿Solo chicas?: 
+                                        </label>
+                                        <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" checked={isCheckedFemale} onChange={handleCheckedFemaleInput}/>
+                                    </div>
+                                    </>
+                                }
+                                
+                            </div>
+
+                        </fieldset>
+
+                        <button type="submit" name="main--form--findrunners--button--submit" className="main--form--findrunners--button--submit" id="main--form--findrunners--button--submit">Modificar</button>
+
+                    </form>
+                </div>
+            </main>
+        );
+    }
 }

@@ -17,13 +17,6 @@ export default function Footer() {
                 </div>
 
                 <div className="footer--ul--anchor--wrap">
-                    <Link className="footer--ul--anchor" href="/terms-of-use">
-                        <li className="footer--ul--li">Condiciones de uso</li>
-                        <span className="border--bottom--span--hover"></span>
-                    </Link>
-                </div>
-
-                <div className="footer--ul--anchor--wrap">
                     <Link className="footer--ul--anchor" href="/privacy">
                         <li className="footer--ul--li">Aviso de privacidad</li>
                         <span className="border--bottom--span--hover"></span>

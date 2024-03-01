@@ -1,8 +1,7 @@
 "use client";
 
-import { GetUserInterface, UserContext, UtilsContext } from "../../src/app/layout";
+import { GetUserInterface, UserContext, UtilsContext } from "../../src/app/container";
 
-import shoe from "../../public/assets/pictures/shoe.png";
 import runningShoe from "../../public/assets/pictures/running-shoe.png";
 
 import Image from "next/image";
@@ -44,38 +43,35 @@ export default function Header(props: any) {
 
             e.currentTarget.classList.toggle("active");
 
-            /*const main = (document.getElementsByClassName("main")[0] as HTMLElement);
-            const anchorNav = (document.getElementsByClassName("nav--ul--anchor") as HTMLCollectionOf<HTMLAnchorElement>);*/
+            
+            const spanTextHome = (document.getElementsByClassName("container--text") as HTMLCollectionOf<HTMLSpanElement>);
 
-            e.currentTarget.classList.contains("active") ? main.classList.add("active") : setTimeout(() => main.classList.remove("active"), 200);
+            const imgShoe = (e.currentTarget.children[0]);
+
+            e.currentTarget.classList.contains("active") ? (main.classList.add("active"), imgShoe.classList.add("active")) : (setTimeout(() => main.classList.remove("active"), 200), imgShoe.classList.remove("active"));
             
             if (e.currentTarget.classList.contains("active")) {
 
                 Array.from(anchorNav).forEach( elem => elem.classList.add("active"));
+                Array.from(spanTextHome).forEach( elem => elem.classList.add("active"));
             }
 
             else if (!e.currentTarget.classList.contains("active")) {
 
                 Array.from(anchorNav).forEach( elem => elem.classList.remove("active"));
+
+                setTimeout(() => {
+
+                    Array.from(spanTextHome).forEach( elem => elem.classList.remove("active"));
+                }, 200);
             }
         }
-        /*e.currentTarget.classList.toggle("active");
-
-        const main = (document.getElementsByClassName("main")[0] as HTMLElement);
-        const anchorNav = (document.getElementsByClassName("nav--ul--anchor") as HTMLCollectionOf<HTMLAnchorElement>);
-
-        e.currentTarget.classList.contains("active") ? main.classList.add("active") : main.classList.remove("active");
-        
-        if (e.currentTarget.classList.contains("active")) {
-
-            Array.from(anchorNav).forEach( elem => elem.classList.add("active"));
-        }
-
-        else if (!e.currentTarget.classList.contains("active")) {
-
-            Array.from(anchorNav).forEach( elem => elem.classList.remove("active"));
-        }*/
     };
+
+
+
+
+
 
     const handleCloseMenu = () => {
         const divMenu = (document.getElementsByClassName("header--h1--img--wrap")[0] as HTMLDivElement);
@@ -98,6 +94,9 @@ export default function Header(props: any) {
         e.preventDefault();
 
         sessionStorage.removeItem("lastActivity");
+
+        document.cookie = `user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
 
         userContext.setJwtFunction("");
 
@@ -131,7 +130,26 @@ export default function Header(props: any) {
 
                 <div className="header--h1--wrap--anchor--menu">
                     <Link className="header--h1--anchor" href={"/"} onClick={handleCloseMenu}>
-                        <h1 className="header--h1">Correr <span className="header--h1--span">Juntos</span></h1>
+                        <h1 className="header--h1">
+                            
+                            <div className="title--div--wrap one">
+                                <span className="title--letter">C</span>
+                                <span className="title--letter">o</span>
+                                <span className="title--letter">r</span>
+                                <span className="title--letter">r</span>
+                                <span className="title--letter">e</span>
+                                <span className="title--letter">r</span>
+                            </div>
+
+                            <div className="title--div--wrap two">
+                                <span className="title--letter">J</span>
+                                <span className="title--letter">u</span>
+                                <span className="title--letter">n</span>
+                                <span className="title--letter">t</span>
+                                <span className="title--letter">o</span>
+                                <span className="title--letter">s</span>
+                            </div>
+                        </h1>
                     </Link>
                     
                     <div className="header--h1--img--wrap" onClick={handleClickMenu}>

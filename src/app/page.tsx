@@ -5,7 +5,7 @@ import { SyntheticEvent, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { RaceInterface, UserContext, UtilsContext } from "./layout";
+import { RaceInterface, UserContext, UtilsContext } from "./container";
 import BackButton from "../../components/BackButton/page";
 
 import runnerIcon from "../../public/assets/pictures/runner-icon.svg";
@@ -19,6 +19,9 @@ import testimonial_1 from "../../public/assets/pictures/testimonial_1.jpg";
 import testimonial_2 from "../../public/assets/pictures/testimonial_2.jpg";
 
 export default function App() {
+
+
+  // TESTIMONIAL DATA //
 
   const [dataTestimonial, setDataTestimonial] = useState({
     "0": {
@@ -44,6 +47,11 @@ export default function App() {
   });
 
 
+
+
+
+
+  // CLICK ARROW CAROUSEL //
 
   const handleClickArrowCarousel = (e: SyntheticEvent, direction: string) => {
 
@@ -183,6 +191,11 @@ export default function App() {
                   entry.target.classList.add("active");
                 }
 
+                else if (entry.target.className.includes("main--div--ul--last--races--anchor")) {
+
+                  entry.target.classList.add("active");
+                }
+
                 else {
 
                   entry.target.classList.add("scroll--animation--active");
@@ -201,10 +214,14 @@ export default function App() {
 
   useEffect(() => {
     utilsContext.setBackButton(window.location.pathname);
+
     fetchLastRaces();
+
     observerFunction("scroll--animation--left");
     observerFunction("scroll--animation--right");
     observerFunction("welcome--text--span");
+    
+    //observerFunction("main--div--ul--last--races--anchor");
 
     userContext.message.length > 0 ? setMessageTrueFalse(true) : setMessageTrueFalse(false);
 
@@ -280,14 +297,37 @@ console.log(getLastRaces);
       </div>
 
       <div className="main--div main--div--last--races">
+
         <h2 className="main--div--register--title title--last--race">Últimas carreras registradas</h2>
+
+        <div className="legend--div">
+
+          <span className="legend--title">Nivel</span>
+
+          <div className="legend--div--section">
+            <span className="legend--low--span--label">Bajo</span>
+            <span className="legend--low--span--color low"></span>
+          </div>
+
+          <div className="legend--div--section">
+            <span className="legend--low--span--label">Medio</span>
+            <span className="legend--low--span--color mid"></span>
+          </div>
+
+          <div className="legend--div--section">
+          <span className="legend--low--span--label">Alto</span>
+            <span className="legend--low--span--color high"></span>
+          </div>
+        </div>
+
+
         <ul className="main--div--ul--last--races">
 
         {getLastRaces !== undefined ?
 
           Object.keys(getLastRaces).map( (elem, ind) =>
 
-            <Link key={ind} href={`/races/${(getLastRaces as any)[elem].id}`} className={`main--div--ul--last--races--anchor ${(getLastRaces as any)[elem].raceLevel == "bajo" ? "low--level" : (getLastRaces as any)[elem].raceLevel == "medio" ? "mid--level" : (getLastRaces as any)[elem].raceLevel == "alto" ? "high--level" : ""}`}>
+            <Link key={ind} href={`/races/${(getLastRaces as any)[elem].id}`} className={`main--div--ul--last--races--anchor active ${(getLastRaces as any)[elem].raceLevel == "bajo" ? "low--level" : (getLastRaces as any)[elem].raceLevel == "medio" ? "mid--level" : (getLastRaces as any)[elem].raceLevel == "alto" ? "high--level" : ""}`}>
 
               <li className="main--div--ul--last--races--li">
 
@@ -330,7 +370,7 @@ console.log(getLastRaces);
                     { (getLastRaces as any)[elem].onlyMale == "yes" ?
 
                         <Image
-                          className="male-icon"
+                          className="male--icon"
                           alt="male-icon"
                           src="../assets/pictures/male-icon.svg"
                           width={15}
@@ -340,7 +380,7 @@ console.log(getLastRaces);
                     : (getLastRaces as any)[elem].onlyFemale == "yes" ?
 
                         <Image
-                          className="male-icon"
+                          className="male--icon"
                           alt="male-icon"
                           src="../assets/pictures/female-icon.svg"
                           width={15}

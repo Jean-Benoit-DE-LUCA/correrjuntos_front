@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { UserContext, UtilsContext } from "../layout";
+import { UserContext, UtilsContext } from "../container";
 
 import { useContext, useEffect } from "react";
 import BackButton from "../../../components/BackButton/page";
@@ -55,6 +55,16 @@ export default function SignIn() {
                 userContext.setJwtFunction(responseData.token);
 
                 userContext.setUserDataFunction(userContext.getUserData, responseData.result);
+
+                console.log(responseData.result);
+                console.log(responseData.token);
+
+                const stringUserData = JSON.stringify(responseData.result);
+                console.log(stringUserData);
+                document.cookie = `user=${stringUserData};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+                document.cookie = `token=${responseData.token};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
+
+
                 userContext.setCount(1);
 
                 document.documentElement.style.setProperty('--divErrorColor', '#0eab2a');

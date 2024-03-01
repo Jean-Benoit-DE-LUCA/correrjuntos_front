@@ -2,14 +2,18 @@
 
 import { Fragment, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { GetUserInterface, UserContext, UtilsContext } from "../layout";
+import { GetUserInterface, UserContext, UtilsContext } from "../container";
 import BackButton from "../../../components/BackButton/page";
 
 import filledStar from "../../../public/assets/pictures/star-filled.svg";
 import emptyStar from "../../../public/assets/pictures/star-empty.svg";
 import arrowRightLeft from "../../../public/assets/pictures/arrow-right-left.svg";
+import Loader from "../../../components/Loader/page";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
+
+    const router = useRouter();
 
     const userContext = useContext(UserContext);
     const utilsContext = useContext(UtilsContext);
@@ -39,11 +43,14 @@ export default function Profile() {
 
     const fetchReviewsByUserId = async (user_id: number) => {
 
-        const response = await fetch(`http://localhost:8080/api/review/fetch/user_id/${userContext.getUserData.id}`);
+        if (!isNaN(userContext.getUserData.id)) {
 
-        const responseData = await response.json();
-        console.log(responseData);
-        setFetchReviews(responseData);
+            const response = await fetch(`http://localhost:8080/api/review/fetch/user_id/${userContext.getUserData.id}`);
+
+            const responseData = await response.json();
+            
+            setFetchReviews(responseData);
+        }
     };
 
 
@@ -310,6 +317,18 @@ export default function Profile() {
 
     const handleClickSwitch = (e: React.MouseEvent) => {
 
+        // rotate effect on click //
+
+        let rotateNumberRoot = getComputedStyle(document.documentElement).getPropertyValue("--rotateNumber");
+
+        document.documentElement.style.setProperty("--rotateNumber", (Number(rotateNumberRoot) + 180).toString());
+
+        (e.currentTarget as HTMLImageElement).style.transition = "transform .6s";
+
+        (e.currentTarget as HTMLImageElement).style.transform = `rotate(${rotateNumberRoot}deg)`;
+
+
+
         const divProfile = (document.getElementsByClassName("main--div--register main--div--profile")[0] as HTMLDivElement);
         divProfile.classList.toggle("active");
 
@@ -393,263 +412,306 @@ export default function Profile() {
     };
 
 
+
+
+
+    const [countFetchReviews, setCountFetchReviews] = useState<number>(0);
+
     useEffect(() => {
 
         userContext.setUserDataFunction(getUser, userContext.getUserData);
         fetchReviewsByUserId(userContext.getUserData.id);
+    }, [countFetchReviews]);
+
+
+
+
+
+    useEffect(() => {
+
+        setCountFetchReviews(countFetchReviews + 1);
     }, []);
+
+
+
+
+
 
     useEffect(() => {
 
         utilsContext.setBackButton(window.location.pathname);
+
+        setTimeout(() => {
+
+            if (userContext.getUserData.email.length == 0) {
+                userContext.setMessage("Debes autenticarte para acceder a esta zona.");
+                router.push("/");
+            }
+    
+            else {
+                setIsLoading(false);
+            }
+        }, 1500);
     }, []);
 
+    
+    
 
 
-    return (
-        
-        <main className="main">
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-            <BackButton pathname={utilsContext.backButton}/>
+    if (isLoading) {
 
-            <Image
-                onClick={handleClickSwitch}
-                className="image--switch"
-                alt="arrow-switch"
-                src={arrowRightLeft}
-                height={0}
-                width={0}
-                unoptimized
-            />
+        return <Loader />
+    }
+
+    if (!isLoading) {
+
+        return (
             
-            <div className="main--div main--div--register main--div--profile active">
+            <main className="main">
 
-                <div className="error--div profile">
-                    <p className="error--div--p">
+                <BackButton pathname={utilsContext.backButton}/>
 
-                    </p>
-                </div>
+                <Image
+                    onClick={handleClickSwitch}
+                    className="image--switch"
+                    alt="arrow-switch"
+                    src={arrowRightLeft}
+                    height={0}
+                    width={0}
+                    unoptimized
+                />
+                
+                <div className="main--div main--div--register main--div--profile active">
 
-                <h2 className="main--div--register--title">
-                    Perfil usuario
-                </h2>
+                    <div className="error--div profile">
+                        <p className="error--div--p">
 
-                <form className="main--div--register--form" method="POST" onSubmit={handleSubmitProfile}>
+                        </p>
+                    </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--picture">
-                            Foto:
-                        </label>
-                        <input className="main--div--register--form--input--picture" type="file" name="main--div--register--form--input--picture" id="main--div--register--form--input--picture" onChange={handleChangeFilePicture}/>
+                    <h2 className="main--div--register--title">
+                        Perfil usuario
+                    </h2>
 
-                        <div className="main--div--register--form--input--picture--div">
+                    <form className="main--div--register--form" method="POST" onSubmit={handleSubmitProfile}>
 
-                            {getUser.picture == "" || getUser.picture == null ?
-                            
-                                <Image
-                                    className="main--div--register--form--input--picture--img"
-                                    src={`http://localhost:8080/pictures/no_image.png`}
-                                    alt="user-picture"
-                                    height={0}
-                                    width={0}
-                                    unoptimized
-                                />
-
-                            :
-                        
-                                <Image
-                                    className="main--div--register--form--input--picture--img"
-                                    src={`http://localhost:8080/uploads/${getUser.picture}`}
-                                    alt="user-picture"
-                                    height={0}
-                                    width={0}
-                                    unoptimized
-                                />
-
-                            }
-                        </div>
-                        
-                        <div className="upload--delete--picture--wrap">
-                            <label className="main--div--register--form--label picture" htmlFor="main--div--register--form--input--picture">
-                                Subir imágen
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--picture">
+                                Foto:
                             </label>
-                            <button type="button" className="delete--picture" name="delete--picture" id="delete--picture" onClick={handleCrossClickDelete}>X</button>
-                        </div>
-                    </div>
+                            <input className="main--div--register--form--input--picture" type="file" name="main--div--register--form--input--picture" id="main--div--register--form--input--picture" onChange={handleChangeFilePicture}/>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--firstname">
-                            Nombre*:
-                        </label>
-                        <input className="main--div--register--form--input--firstname" type="text" name="main--div--register--form--input--firstname" id="main--div--register--form--input--firstname" value={getUser.firstName} onChange={(e) => handleChangeInput(e, "firstName")}/>
-                    </div>
+                            <div className="main--div--register--form--input--picture--div">
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--lastname">
-                            Apellido*:
-                        </label>
-                        <input className="main--div--register--form--input--lastname" type="text" name="main--div--register--form--input--lastname" id="main--div--register--form--input--lastname" value={getUser.lastName} onChange={(e) => handleChangeInput(e, "lastName")}/>
-                    </div>
+                                {getUser.picture == "" || getUser.picture == null ?
+                                
+                                    <Image
+                                        className="main--div--register--form--input--picture--img"
+                                        src={`http://localhost:8080/pictures/no_image.png`}
+                                        alt="user-picture"
+                                        height={0}
+                                        width={0}
+                                        unoptimized
+                                    />
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--birthdate">
-                            Fecha de nacimiento*:
-                        </label>
-                        <input className="main--div--register--form--input--birthdate" type="date" name="main--div--register--form--input--birthdate" id="main--div--register--form--input--birthdate" value={getUser.birthDate} onChange={(e) => handleChangeInput(e, "birthDate")}/>
-                    </div>
-
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--select--gender">
-                            Género*:
-                        </label>
-
-                        <select className="main--div--register--form--select--gender" name="main--div--register--form--select--gender" id="main--div--register--form--select--gender" value={getUser.gender} onChange={(e) => handleChangeInput(e, "gender")}>
+                                :
                             
-                            <option value="male" >Hombre</option>
-                            <option value="female" >Mujer</option>
+                                    <Image
+                                        className="main--div--register--form--input--picture--img"
+                                        src={`http://localhost:8080/uploads/${getUser.picture}`}
+                                        alt="user-picture"
+                                        height={0}
+                                        width={0}
+                                        unoptimized
+                                    />
 
-                        </select>
-                    </div>
+                                }
+                            </div>
+                            
+                            <div className="upload--delete--picture--wrap">
+                                <label className="main--div--register--form--label picture" htmlFor="main--div--register--form--input--picture">
+                                    Subir imágen
+                                </label>
+                                <button type="button" className="delete--picture" name="delete--picture" id="delete--picture" onClick={handleCrossClickDelete}>X</button>
+                            </div>
+                        </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--email">
-                            Correo electrónico*:
-                        </label>
-                        <input className="main--div--register--form--input--email" type="email" name="main--div--register--form--input--email" id="main--div--register--form--input--email" value={getUser.email} onChange={(e) => handleChangeInput(e, "email")}/>
-                    </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--firstname">
+                                Nombre*:
+                            </label>
+                            <input className="main--div--register--form--input--firstname" type="text" name="main--div--register--form--input--firstname" id="main--div--register--form--input--firstname" value={getUser.firstName} onChange={(e) => handleChangeInput(e, "firstName")}/>
+                        </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
-                            Número de calle:
-                        </label>
-                        <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getUser.streetNumber == -1 || Number.isNaN(getUser.streetNumber) ? "" : getUser.streetNumber} onChange={(e) => handleChangeInput(e, "streetNumber")}/* not required *//>
-                    </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--lastname">
+                                Apellido*:
+                            </label>
+                            <input className="main--div--register--form--input--lastname" type="text" name="main--div--register--form--input--lastname" id="main--div--register--form--input--lastname" value={getUser.lastName} onChange={(e) => handleChangeInput(e, "lastName")}/>
+                        </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
-                            Nombre de calle*:
-                        </label>
-                        <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name" value={getUser.streetName} onChange={(e) => handleChangeInput(e, "streetName")}/>
-                    </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--birthdate">
+                                Fecha de nacimiento*:
+                            </label>
+                            <input className="main--div--register--form--input--birthdate" type="date" name="main--div--register--form--input--birthdate" id="main--div--register--form--input--birthdate" value={getUser.birthDate} onChange={(e) => handleChangeInput(e, "birthDate")}/>
+                        </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--zip--code">
-                            Código postal*:
-                        </label>
-                        <input className="main--div--register--form--input--zip--code" type="number" name="main--div--register--form--input--zip--code" id="main--div--register--form--input--zip--code" value={Number.isNaN(getUser.zipCode) ? "" : getUser.zipCode} onChange={(e) => handleChangeInput(e, "zipCode")}/>
-                    </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--select--gender">
+                                Género*:
+                            </label>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
-                            Ciudad*:
-                        </label>
-                        <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" value={getUser.city} onChange={(e) => handleChangeInput(e, "city")}/>
-                    </div>
+                            <select className="main--div--register--form--select--gender" name="main--div--register--form--select--gender" id="main--div--register--form--select--gender" value={getUser.gender} onChange={(e) => handleChangeInput(e, "gender")}>
+                                
+                                <option value="male" >Hombre</option>
+                                <option value="female" >Mujer</option>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password">
-                            Contraseña*:
-                        </label>
-                        <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" autoComplete="off" onChange={(e) => handleChangeInput(e, "password")}/>
-                    </div>
+                            </select>
+                        </div>
 
-                    <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password--confirm">
-                            Confirmar contraseña*:
-                        </label>
-                        <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" autoComplete="off"/>
-                    </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--email">
+                                Correo electrónico*:
+                            </label>
+                            <input className="main--div--register--form--input--email" type="email" name="main--div--register--form--input--email" id="main--div--register--form--input--email" value={getUser.email} onChange={(e) => handleChangeInput(e, "email")}/>
+                        </div>
 
-                    <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar
-                    <span className="hover--button--span"></span>
-                    </button>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
+                                Número de calle:
+                            </label>
+                            <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" value={getUser.streetNumber == -1 || Number.isNaN(getUser.streetNumber) ? "" : getUser.streetNumber} onChange={(e) => handleChangeInput(e, "streetNumber")}/* not required *//>
+                        </div>
 
-                </form>
-            </div>
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
+                                Nombre de calle*:
+                            </label>
+                            <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name" value={getUser.streetName} onChange={(e) => handleChangeInput(e, "streetName")}/>
+                        </div>
 
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--zip--code">
+                                Código postal*:
+                            </label>
+                            <input className="main--div--register--form--input--zip--code" type="number" name="main--div--register--form--input--zip--code" id="main--div--register--form--input--zip--code" value={Number.isNaN(getUser.zipCode) ? "" : getUser.zipCode} onChange={(e) => handleChangeInput(e, "zipCode")}/>
+                        </div>
 
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
+                                Ciudad*:
+                            </label>
+                            <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" value={getUser.city} onChange={(e) => handleChangeInput(e, "city")}/>
+                        </div>
 
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password">
+                                Contraseña*:
+                            </label>
+                            <input className="main--div--register--form--input--password" type="password" name="main--div--register--form--input--password" id="main--div--register--form--input--password" autoComplete="off" onChange={(e) => handleChangeInput(e, "password")}/>
+                        </div>
 
-            <div className="main--div main--div--register main--div--profile--review off">
+                        <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--password--confirm">
+                                Confirmar contraseña*:
+                            </label>
+                            <input className="main--div--register--form--input--password--confirm" type="password" name="main--div--register--form--input--password--confirm" id="main--div--register--form--input--password--confirm" autoComplete="off"/>
+                        </div>
 
-                <div className="error--div profile">
-                    <p className="error--div--p">
+                        <button className="main--div--register--form--button--submit" type="submit" name="main--div--register--form--button--submit">Validar
+                        <span className="hover--button--span"></span>
+                        </button>
 
-                    </p>
+                    </form>
                 </div>
 
-                <h2 className="main--div--register--title">
-                    Reseñas
-                </h2>
 
-                <ul className="profile--review--ul">
-                    
-                    {Object.keys(fetchReviews).map((elem, ind) => 
+
+
+                <div className="main--div main--div--register main--div--profile--review off">
+
+                    <div className="error--div profile">
+                        <p className="error--div--p">
+
+                        </p>
+                    </div>
+
+                    <h2 className="main--div--register--title">
+                        Reseñas
+                    </h2>
+
+                    <ul className="profile--review--ul">
                         
-                       <li className="profile--review--ul--li" key={ind}>
+                        {Object.keys(fetchReviews).map((elem, ind) => 
+                            
+                        <li className="profile--review--ul--li" key={ind}>
 
-                            <button className="profile--review--ul--li--button--delete" name="profile--review--ul--li--button--delete" type="button" onClick={(e) => handleClickDeleteReview(e, (fetchReviews as any)[elem].review_id)}>
-                                <div className="profile--review--ul--li--button--delete--div--wrap">
-                                    <span className="profile--review--ul--li--button--delete--span">X</span>
+                                <button className="profile--review--ul--li--button--delete" name="profile--review--ul--li--button--delete" type="button" onClick={(e) => handleClickDeleteReview(e, (fetchReviews as any)[elem].review_id)}>
+                                    <div className="profile--review--ul--li--button--delete--div--wrap">
+                                        <span className="profile--review--ul--li--button--delete--span">X</span>
 
-                                    <div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
-                                        <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
+                                        <div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
+                                            <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
 
-                                        <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
-                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes" onClick={(e) => handleClickConfirmDeleteReview(e, (fetchReviews as any)[elem].review_id)}>Sí</span>
-                                            <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
+                                            <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
+                                                <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes" onClick={(e) => handleClickConfirmDeleteReview(e, (fetchReviews as any)[elem].review_id)}>Sí</span>
+                                                <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
+                                            </div>
                                         </div>
                                     </div>
+                                </button>
+
+                                <div className="profile--review--ul--li--div">
+
+                                    <span className="profile--review--ul--li--span--firstname">{(fetchReviews as any)[elem].users_first_name}</span>
+                                    
+                                    <div className="profile--review--ul--li--div--wrap--stars">
+                                        {Array.from(Array(Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
+                                            <Fragment key={ind}>
+                                            <Image
+                                                key={ind}
+                                                className="profile--star"
+                                                alt="star"
+                                                src={filledStar}
+                                                height={0}
+                                                width={0}
+                                            />
+                                            </Fragment>
+                                        )}
+
+                                        {Array.from(Array(5 - Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
+                                            <Fragment key={ind}>
+                                            <Image
+                                                key={ind}
+                                                className="profile--star"
+                                                alt="star"
+                                                src={emptyStar}
+                                                height={0}
+                                                width={0}
+                                            />
+                                            </Fragment>
+                                        )}
+
+
+                                    </div>
+
+                                    <span className="profile--review--ul--li--span--comment">{(fetchReviews as any)[elem].review_comment}</span>
+
+                                    <span className="profile--review--ul--li--span--datetime">{(fetchReviews as any)[elem].review_created_at}</span>
                                 </div>
-                            </button>
+                        </li>     
+                            
+                        )}
+                    </ul>
 
-                            <div className="profile--review--ul--li--div">
+                    <div className="main--div--register--form profile--opinion">
 
-                                <span className="profile--review--ul--li--span--firstname">{(fetchReviews as any)[elem].users_first_name}</span>
-                                
-                                <div className="profile--review--ul--li--div--wrap--stars">
-                                    {Array.from(Array(Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
-                                        <Fragment key={ind}>
-                                        <Image
-                                            key={ind}
-                                            className="profile--star"
-                                            alt="star"
-                                            src={filledStar}
-                                            height={0}
-                                            width={0}
-                                        />
-                                        </Fragment>
-                                    )}
-
-                                    {Array.from(Array(5 - Number((fetchReviews as any)[elem].review_rate)) as any).map((num, ind) =>
-                                        <Fragment key={ind}>
-                                        <Image
-                                            key={ind}
-                                            className="profile--star"
-                                            alt="star"
-                                            src={emptyStar}
-                                            height={0}
-                                            width={0}
-                                        />
-                                        </Fragment>
-                                    )}
-
-
-                                </div>
-
-                                <span className="profile--review--ul--li--span--comment">{(fetchReviews as any)[elem].review_comment}</span>
-
-                                <span className="profile--review--ul--li--span--datetime">{(fetchReviews as any)[elem].review_created_at}</span>
-                            </div>
-                       </li>     
-                        
-                    )}
-                </ul>
-
-                <div className="main--div--register--form profile--opinion">
-
+                    </div>
                 </div>
-            </div>
-        </main>
-    );
+            </main>
+        );
+    }
 }

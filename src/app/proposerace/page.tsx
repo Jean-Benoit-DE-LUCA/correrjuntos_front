@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, Fragment } from "react";
-import { UserContext, UtilsContext } from "../layout";
+import { useContext, useEffect, Fragment, useState } from "react";
+import { UserContext, UtilsContext } from "../container";
+
+import Loader from "../../../components/Loader/page";
 import BackButton from "../../../components/BackButton/page";
 
 export default function ProposeRace() {
@@ -189,184 +191,205 @@ export default function ProposeRace() {
 
         utilsContext.setBackButton(window.location.pathname);
 
-        if (userContext.getUserData.email.length == 0) {
-            userContext.setMessage("Debes autenticarte para proponer una carrera.");
-            router.push("/");
-        }
+        setTimeout(() => {
+
+            if (userContext.getUserData.email.length == 0) {
+                userContext.setMessage("Debes autenticarte para proponer una carrera.");
+                router.push("/");
+            }
+
+            else {
+                setIsLoading(false);
+            }
+        }, 1500);
+        
     }, []);
 
-    return (
-        <main className="main">
 
-            <BackButton pathname={utilsContext.backButton}/>
 
-            <div className="error--div error--div--proposerace">
-                <p className="error--div--p">
 
-                </p>
-            </div>
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-            <div className="main--div main--div--register main--div--proposerace">
+    if (isLoading) {
 
-                <h2 className="main--div--register--title main--div--proposerace--title">
-                    Proponer una carrera
-                </h2>
+        return <Loader />
+    }
 
-                <form className="main--div--form--proposerace" name="main--div--form--proposerace" method="POST" onSubmit={handleSubmitProposeRace}>
-                    
-                    <fieldset className="main--div--form--fieldset">
-                        <legend className="main--div--form--proposerace--where">Dónde</legend>
+    if (!isLoading) {
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
-                                Número de calle:
+        return (
+            <main className="main">
+
+                <BackButton pathname={utilsContext.backButton}/>
+
+                <div className="error--div error--div--proposerace">
+                    <p className="error--div--p">
+
+                    </p>
+                </div>
+
+                <div className="main--div main--div--register main--div--proposerace">
+
+                    <h2 className="main--div--register--title main--div--proposerace--title">
+                        Proponer una carrera
+                    </h2>
+
+                    <form className="main--div--form--proposerace" name="main--div--form--proposerace" method="POST" onSubmit={handleSubmitProposeRace}>
+                        
+                        <fieldset className="main--div--form--fieldset">
+                            <legend className="main--div--form--proposerace--where">Dónde</legend>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--number">
+                                    Número de calle:
+                                </label>
+                                <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" /* not required *//>
+                            </div>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
+                                    Nombre de calle *:
+                                </label>
+                                <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name" />
+                            </div>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
+                                    Ciudad *:
+                                </label>
+                                <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" />
+                            </div>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--proposerace--form--textarea--furthersdetails">
+                                    Información adicional:
+                                </label>
+                                <textarea className="main--div--proposerace--form--textarea--furthersdetails" name="main--div--proposerace--form--textarea--furthersdetails" id="main--div--proposerace--form--textarea--furthersdetails" placeholder="Añade información que consideres relevante"></textarea>
+                            </div>
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--when">
+                            <legend className="main--div--form--proposerace--where">Cuando</legend>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--date">
+                                Fecha *:
                             </label>
-                            <input className="main--div--register--form--input--street--number" type="number" name="main--div--register--form--input--street--number" id="main--div--register--form--input--street--number" /* not required *//>
-                        </div>
+                            <input className="main--div--register--form--input--date" type="date" name="main--div--register--form--input--date" id="main--div--register--form--input--date" min={new Date().toISOString().slice(0, 10)}/>
+                            </div>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--street--name">
-                                Nombre de calle *:
-                            </label>
-                            <input className="main--div--register--form--input--street--name" type="text" name="main--div--register--form--input--street--name" id="main--div--register--form--input--street--name" />
-                        </div>
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--hour--start">
+                                    Hora *:
+                                </label>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--city">
-                                Ciudad *:
-                            </label>
-                            <input className="main--div--register--form--input--city" type="text" name="main--div--register--form--input--city" id="main--div--register--form--input--city" />
-                        </div>
+                                <div className="main--form--findrunners--hour--box">
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--proposerace--form--textarea--furthersdetails">
-                                Información adicional:
-                            </label>
-                            <textarea className="main--div--proposerace--form--textarea--furthersdetails" name="main--div--proposerace--form--textarea--furthersdetails" id="main--div--proposerace--form--textarea--furthersdetails" placeholder="Añade información que consideres relevante"></textarea>
-                        </div>
-                    </fieldset>
+                                    <select className="main--div--register--form--input--hour--start" name="main--div--register--form--input--hour--start" id="main--div--register--form--input--hour--start">
+                                        {Array.from(Array(24)).map( (elem, ind) => 
+                                            <Fragment key={ind}>
+                                                <option value={ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}>{ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}</option>
+                                                <option value={ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}>{ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}</option>
+                                                <option value={ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}>{ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}</option>
+                                                <option value={ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}>{ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}</option>
+                                            </Fragment>
+                                        )}
 
-                    <fieldset className="main--div--form--fieldset fieldset--when">
-                        <legend className="main--div--form--proposerace--where">Cuando</legend>
+                                    </select>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                        <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--date">
-                            Fecha *:
-                        </label>
-                        <input className="main--div--register--form--input--date" type="date" name="main--div--register--form--input--date" id="main--div--register--form--input--date" min={new Date().toISOString().slice(0, 10)}/>
-                        </div>
+                                </div>
+                            </div>
 
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--hour--start">
-                                Hora *:
-                            </label>
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--howmany--time">
+                            <legend className="main--div--form--proposerace--where">Cuánto</legend>
+
+                            <div className="main--div--register--form--wrap--label--input">
+                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--racetime">
+                                    Tiempo de carrera *:
+                                </label>
+
+                                <div className="main--form--findrunners--hour--box">
+
+                                    <select className="main--div--register--form--input--racetime" name="main--div--register--form--input--racetime" id="main--div--register--form--input--racetime">
+                                        {Array("indefinido", "0h15", "0h30", "0h45", "1h00", "1h15", "1h30", "1h45", "2h00", ">2h00").map( (elem, ind) => 
+
+                                            <option key={elem} value={elem}>{elem}</option>
+
+                                        )}
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset className="main--div--form--fieldset fieldset--race--level">
+                            <legend className="main--div--form--proposerace--where">Nivel carrera</legend>
 
                             <div className="main--form--findrunners--hour--box">
+                                
+                                <div className="main--div--register--form--wrap--label--input">
+                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--race--level">
+                                        Nivel de la carrera *:
+                                    </label>
+                                    
 
-                                <select className="main--div--register--form--input--hour--start" name="main--div--register--form--input--hour--start" id="main--div--register--form--input--hour--start">
-                                    {Array.from(Array(24)).map( (elem, ind) => 
-                                        <Fragment key={ind}>
-                                            <option value={ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}>{ind < 10 ? '0' + ind + ':' + '00' : ind + ':' + '00'}</option>
-                                            <option value={ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}>{ind < 10 ? '0' + ind + ':' + '15' : ind + ':' + '15'}</option>
-                                            <option value={ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}>{ind < 10 ? '0' + ind + ':' + '30' : ind +  ':' + '30'}</option>
-                                            <option value={ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}>{ind < 10 ? '0' + ind + ':' + '45' : ind +  ':' + '45'}</option>
-                                        </Fragment>
-                                    )}
-
-                                </select>
-
+                                    <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level">
+                                        <option value="bajo">Bajo</option>
+                                        <option value="medio">Medio</option>
+                                        <option value="alto">Alto</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        </fieldset>
 
-                    </fieldset>
-
-                    <fieldset className="main--div--form--fieldset fieldset--howmany--time">
-                        <legend className="main--div--form--proposerace--where">Cuánto</legend>
-
-                        <div className="main--div--register--form--wrap--label--input">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--racetime">
-                                Tiempo de carrera *:
+                        <fieldset className="main--div--form--fieldset fieldset--howmany--users">
+                            <legend className="main--div--form--proposerace--where">Participantes</legend>
+                            
+                            <label className="main--div--register--form--label wrap--label" htmlFor="main--div--register--form--input--hour--start">
+                                    Participantes 
+                                    <span>máximo *:</span>
                             </label>
 
-                            <div className="main--form--findrunners--hour--box">
-
-                                <select className="main--div--register--form--input--racetime" name="main--div--register--form--input--racetime" id="main--div--register--form--input--racetime">
-                                    {Array("indefinido", "0h15", "0h30", "0h45", "1h00", "1h15", "1h30", "1h45", "2h00", ">2h00").map( (elem, ind) => 
-
-                                        <option key={elem} value={elem}>{elem}</option>
-
-                                    )}
-
-                                </select>
+                            <div className="main--form--findrunners--hour--box maximum--users">
+                                
+                                <div className="main--form--findrunners--undefined--checkbox--wrap--div">
+                                    <label className="main--div--register--form--label" htmlFor="main--form--findrunners--undefined--checkbox">Sin límites</label>
+                                    <input className="main--form--findrunners--undefined--checkbox" type="checkbox" name="main--form--findrunners--undefined--checkbox" id="main--form--findrunners--undefined--checkbox" onChange={handleCheckedNoLimitInput}/>
+                                </div>
+                                
+                                <input className="main--div--register--form--input--hour--start maximum--users" type="number" name="main--div--register--form--input--hour--start maximum--users" id="main--div--register--form--input--hour--start maximum--users" />
 
                             </div>
-                        </div>
-
-                    </fieldset>
-
-                    <fieldset className="main--div--form--fieldset fieldset--race--level">
-                        <legend className="main--div--form--proposerace--where">Nivel carrera</legend>
-
-                        <div className="main--form--findrunners--hour--box">
                             
                             <div className="main--div--register--form--wrap--label--input">
-                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--race--level">
-                                    Nivel de la carrera *:
-                                </label>
                                 
+                                <div className="main--form--findrunners--checkbox--male--wrap--div">
+                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
+                                            ¿Solo chicos?: 
+                                    </label>
+                                    <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" />
+                                </div>
 
-                                <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level">
-                                    <option value="bajo">Bajo</option>
-                                    <option value="medio">Medio</option>
-                                    <option value="alto">Alto</option>
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
+                                <div className="main--form--findrunners--checkbox--female--wrap--div">
+                                    <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
+                                            ¿Solo chicas?: 
+                                    </label>
+                                    <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" />
+                                </div>
 
-                    <fieldset className="main--div--form--fieldset fieldset--howmany--users">
-                        <legend className="main--div--form--proposerace--where">Participantes</legend>
-                        
-                        <label className="main--div--register--form--label wrap--label" htmlFor="main--div--register--form--input--hour--start">
-                                Participantes 
-                                <span>máximo *:</span>
-                        </label>
-
-                        <div className="main--form--findrunners--hour--box maximum--users">
-                            
-                            <div className="main--form--findrunners--undefined--checkbox--wrap--div">
-                                <label className="main--div--register--form--label" htmlFor="main--form--findrunners--undefined--checkbox">Sin límites</label>
-                                <input className="main--form--findrunners--undefined--checkbox" type="checkbox" name="main--form--findrunners--undefined--checkbox" id="main--form--findrunners--undefined--checkbox" onChange={handleCheckedNoLimitInput}/>
-                            </div>
-                            
-                            <input className="main--div--register--form--input--hour--start maximum--users" type="number" name="main--div--register--form--input--hour--start maximum--users" id="main--div--register--form--input--hour--start maximum--users" />
-
-                        </div>
-                        
-                        <div className="main--div--register--form--wrap--label--input">
-                            
-                            <div className="main--form--findrunners--checkbox--male--wrap--div">
-                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--male">
-                                        ¿Solo chicos?: 
-                                </label>
-                                <input type="checkbox" className="main--div--register--form--input--male" name="main--div--register--form--input--male" id="main--div--register--form--input--male" />
                             </div>
 
-                            <div className="main--form--findrunners--checkbox--female--wrap--div">
-                                <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--female">
-                                        ¿Solo chicas?: 
-                                </label>
-                                <input type="checkbox" className="main--div--register--form--input--female" name="main--div--register--form--input--female" id="main--div--register--form--input--female" />
-                            </div>
+                        </fieldset>
 
-                        </div>
+                        <button type="submit" name="main--form--findrunners--button--submit" className="main--form--findrunners--button--submit" id="main--form--findrunners--button--submit">Enviar</button>
 
-                    </fieldset>
-
-                    <button type="submit" name="main--form--findrunners--button--submit" className="main--form--findrunners--button--submit" id="main--form--findrunners--button--submit">Enviar</button>
-
-                </form>
-            </div>
-        </main>
-    );
+                    </form>
+                </div>
+            </main>
+        );
+    }
 }

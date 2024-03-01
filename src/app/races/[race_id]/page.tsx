@@ -1,6 +1,6 @@
 "use client";
 
-import { UserContext, UtilsContext } from "../../../app/layout";
+import { UserContext, UtilsContext } from "../../../app/container";
 
 import { Fragment, useContext, useEffect, useState } from "react";
 
@@ -11,6 +11,7 @@ import Image from "next/image";
 
 import filledStar from "../../../../public/assets/pictures/star-filled.svg";
 import emptyStar from "../../../../public/assets/pictures/star-empty.svg";
+import Loader from "../../../../components/Loader/page";
 
 export interface SpecificRaceInterface {
     id: number;
@@ -255,6 +256,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }
     };
 
+
+
+
+
+
+
+
     const handleClickCancelParticipateRaceConfirmBox = () => {
         const buttonCancel = (document.getElementsByClassName("main--div--register--form--button--submit button--submit--participate cancel--button--participate")[0] as HTMLButtonElement);
 
@@ -276,6 +284,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             }
         }
     };
+
+
+
+
+
+
+
 
     const handleClickCancelParticipateRaceNo = (e: React.MouseEvent<HTMLSpanElement>) => {
         const buttonCancel = (document.getElementsByClassName("main--div--register--form--button--submit button--submit--participate cancel--button--participate")[0] as HTMLButtonElement);
@@ -300,6 +315,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             }
         }
     };
+
+
+
+
+
+
+
 
     const handleClickCancelParticipateRace = async (e: React.MouseEvent<HTMLSpanElement>, raceId: number, email: string, userId: number) => {
 
@@ -408,6 +430,14 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }
     };
 
+
+
+
+
+
+
+
+
     const handleClickSendMessageRace = async (e: React.FormEvent<HTMLButtonElement>, raceId: number, email: string, userId: number, firstName: string) => {
 
         const inputMessage = (document.getElementsByClassName("chat--race--users--form--send--message--input")[0] as HTMLInputElement);
@@ -501,6 +531,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         });
     };
 
+
+
+
+
+
+
+
     // CLICK USER VIEW PROFILE + REVIEWS //
 
     const [getUserProfile, setUserProfile] = useState(
@@ -528,6 +565,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }
         
     );
+
+
+
+
+
+
+
 
     const handleClickUserView = async (e: React.MouseEvent, user_id: string) => {
 
@@ -591,6 +635,11 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         
     };
 
+
+
+
+
+
     const getReview = async (user_id: string) => {
 
         const responseReview = await fetch(`http://localhost:8080/api/review/get/user_id/${user_id}`, {
@@ -603,6 +652,12 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         const responseDataReview = await responseReview.json();
         setCommentUser(responseDataReview);
     };
+
+
+
+
+
+
 
     // SUBMIT REVIEW //
 
@@ -744,9 +799,16 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }, 10);
     }, [countFlag]);
 
+
+
+
     useEffect(() => {
         utilsContext.setBackButton(window.location.pathname);
     }, []);
+
+
+
+
 
     // WEBSOCKET //
 
@@ -786,450 +848,478 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }
     }, []);
 
-    //
 
-    return (
 
-        <main className="main">
 
-            <BackButton pathname={utilsContext.backButton}/>
 
-            <div className="main--div main--div--register main--div--proposerace">
 
-                <div className="error--div error--div--race">
-                    <p className="error--div--p">
+    useEffect(() => {
 
-                    </p>
-                </div>
-
-                <span className={filterUserParticipate() > 0 ? `main--div--raceid--participate--span active` : `main--div--raceid--participate--span`}>Participo!</span>
-
-                <h2 className="main--div--register--title">
-                    Carrera propuesta por 
-                    <br />
-                    <span className="main--div--raceid--title--span">
-                        {getSpecificRace.first_name}
-                    </span>
-                </h2>
-
-                {   getSpecificRace.only_male == "yes" ?
-
-                    <span className="main--div--raceid--only--sex male">¡Solo chicos!</span>
-
-                :   getSpecificRace.only_female == "yes" ?
-
-                    <span className="main--div--raceid--only--sex female">¡Solo chicas!</span>
-
-                :   <Fragment>
+        setTimeout(() => {
             
-                    </Fragment>
-                }
+            setIsLoading(false);
+            
+        }, 1500);
+
+    }, []);
+
+
+
+
+
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    if (isLoading) {
+
+        return <Loader />
+    }
+
+    if (!isLoading) {
+
+        return (
+
+            <main className="main">
+
+                <BackButton pathname={utilsContext.backButton}/>
+
+                <div className="main--div main--div--register main--div--proposerace">
+
+                    <div className="error--div error--div--race">
+                        <p className="error--div--p">
+
+                        </p>
+                    </div>
+
+                    <span className={filterUserParticipate() > 0 ? `main--div--raceid--participate--span active` : `main--div--raceid--participate--span`}>Participo!</span>
+
+                    <h2 className="main--div--register--title">
+                        Carrera propuesta por 
+                        <br />
+                        <span className="main--div--raceid--title--span">
+                            {getSpecificRace.first_name}
+                        </span>
+                    </h2>
+
+                    {   getSpecificRace.only_male == "yes" ?
+
+                        <span className="main--div--raceid--only--sex male">¡Solo chicos!</span>
+
+                    :   getSpecificRace.only_female == "yes" ?
+
+                        <span className="main--div--raceid--only--sex female">¡Solo chicas!</span>
+
+                    :   <Fragment>
                 
+                        </Fragment>
+                    }
+                    
 
-                <ul className="main--div--raceid--details--race--ul">
+                    <ul className="main--div--raceid--details--race--ul">
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Fecha (año/mes/dia):
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.race_date}
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Fecha (año/mes/dia):
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.race_date}
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Hora de inicio:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.race_time.substring(0, getSpecificRace.race_time.lastIndexOf(":"))}
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Hora de inicio:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.race_time.substring(0, getSpecificRace.race_time.lastIndexOf(":"))}
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Duración:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.race_duration}
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Duración:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.race_duration}
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Ciudad:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.city}
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Ciudad:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.city}
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Lugar de salida:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.number_street.toString() == "-1" ?
-                                getSpecificRace.name_street :
-                                getSpecificRace.name_street + ", " + getSpecificRace.number_street.toString()
-                            }
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Lugar de salida:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.number_street.toString() == "-1" ?
+                                    getSpecificRace.name_street :
+                                    getSpecificRace.name_street + ", " + getSpecificRace.number_street.toString()
+                                }
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Usuarios máximos:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.number_users.toString() == "-1" ?
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Usuarios máximos:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.number_users.toString() == "-1" ?
 
-                                "Sin límites" :
+                                    "Sin límites" :
 
-                                getSpecificRace.number_users.toString()
-                            }
-                        </span>
-                    </li>
+                                    getSpecificRace.number_users.toString()
+                                }
+                            </span>
+                        </li>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Usuarios registrados:
-                        </span> 
-                        <ul className="ul--list--registered--users--race">
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Usuarios registrados:
+                            </span> 
+                            <ul className="ul--list--registered--users--race">
 
-                            {getUsersParticipate !== undefined ?
+                                {getUsersParticipate !== undefined ?
 
-                                Object.keys(getUsersParticipate).map( elem => 
-                                    
-                                    <div className="ul--list--registered--users--race--li--wrap" key={(getUsersParticipate as any)[elem].user_id}>
-                                        <li className="ul--list--registered--users--race--li" onClick={(e) => handleClickUserView(e, (getUsersParticipate as any)[elem].user_id)}>
+                                    Object.keys(getUsersParticipate).map( elem => 
+                                        
+                                        <div className="ul--list--registered--users--race--li--wrap" key={(getUsersParticipate as any)[elem].user_id}>
+                                            <li className="ul--list--registered--users--race--li" onClick={(e) => handleClickUserView(e, (getUsersParticipate as any)[elem].user_id)}>
 
-                                            {(getUsersParticipate as any)[elem].first_name}
+                                                {(getUsersParticipate as any)[elem].first_name}
 
-                                            <span className="border--bottom--span--hover"></span>
+                                                <span className="border--bottom--span--hover"></span>
 
-                                            <div className="ul--list--registered--users--race--li--profile">
+                                                <div className="ul--list--registered--users--race--li--profile">
 
-                                                {getUserProfile !== undefined ?
+                                                    {getUserProfile !== undefined ?
 
-                                                <div className="ul--list--registered--users--race--li--profile--wrap--details">
+                                                    <div className="ul--list--registered--users--race--li--profile--wrap--details">
 
-                                                    {getUserProfile.picture !== null &&
+                                                        {getUserProfile.picture !== null &&
 
-                                                        <div className="ul--list--registered--users--race--li--profile--div--img--user">
-                                                            <Image
-                                                                className="ul--list--registered--users--race--li--profile--img--user"
-                                                                height={15}
-                                                                width={15}
-                                                                alt="user-picture"
-                                                                src={`http://localhost:8080/uploads/${getUserProfile.picture}`}
-                                                            />
+                                                            <div className="ul--list--registered--users--race--li--profile--div--img--user">
+                                                                <Image
+                                                                    className="ul--list--registered--users--race--li--profile--img--user"
+                                                                    height={15}
+                                                                    width={15}
+                                                                    alt="user-picture"
+                                                                    src={`http://localhost:8080/uploads/${getUserProfile.picture}`}
+                                                                />
+                                                            </div>
+                                                        }
+
+                                                        <div className="ul--list--registered--users--race--li--profile--wrap--element">
+                                                            <span className="ul--list--registered--users--race--li--profile--span--title">Edad: </span>
+                                                            <span className="ul--list--registered--users--race--li--profile--age" id="ul--list--registered--users--race--li--profile--age">{getUserProfile.age}</span>
                                                         </div>
+
+                                                        <div className="ul--list--registered--users--race--li--profile--wrap--element">
+                                                            <span className="ul--list--registered--users--race--li--profile--span--title">Ciudad: </span>
+                                                            <span className="ul--list--registered--users--race--li--profile--city" id="ul--list--registered--users--race--li--profile--city">{getUserProfile.city}</span>
+                                                        </div>
+
+                                                    </div>
+
+                                                    :
+                                                    
+                                                        <>
+                                                        </>
+                                                    
                                                     }
 
-                                                    <div className="ul--list--registered--users--race--li--profile--wrap--element">
-                                                        <span className="ul--list--registered--users--race--li--profile--span--title">Edad: </span>
-                                                        <span className="ul--list--registered--users--race--li--profile--age">{getUserProfile.age}</span>
-                                                    </div>
-
-                                                    <div className="ul--list--registered--users--race--li--profile--wrap--element">
-                                                        <span className="ul--list--registered--users--race--li--profile--span--title">Ciudad: </span>
-                                                        <span className="ul--list--registered--users--race--li--profile--city">{getUserProfile.city}</span>
-                                                    </div>
-
-                                                </div>
-
-                                                :
-                                                
-                                                    <>
-                                                    </>
-                                                
-                                                }
-
-                                                    <div className="ul--list--registered--users--race--li--profile--confidence--wrap--element">
-                                                        <span className="ul--list--registered--users--race--li--profile--span--title">Confianza: </span>
+                                                        <div className="ul--list--registered--users--race--li--profile--confidence--wrap--element">
+                                                            <span className="ul--list--registered--users--race--li--profile--span--title">Confianza: </span>
 
 
-                                                        <div className="profile--star--wrap">
+                                                            <div className="profile--star--wrap">
 
-                                                            {getUserProfile.average_rate == null ?
+                                                                {getUserProfile.average_rate == null ?
 
-                                                                Array.from(Array(5)).map( (elem, ind) => 
-                                                                    
-                                                                    <Fragment key={ind}>
-                                                                        <Image
-                                                                            key={ind}
-                                                                            className="profile--star"
-                                                                            alt="star"
-                                                                            src={emptyStar}
-                                                                            height={0}
-                                                                            width={0}
-                                                                        />
-                                                                    </Fragment>
-                                                                )
-
-                                                            :   getUserProfile.average_rate !== null ?
-
-                                                                Array.from(Array(getUserProfile.average_rate)).map( (elem, ind) => 
-
-                                                                    <Fragment key={ind}>
-                                                                        <Image
-                                                                            key={ind}
-                                                                            className="profile--star"
-                                                                            alt="star"
-                                                                            src={filledStar}
-                                                                            height={0}
-                                                                            width={0}
-                                                                        />
-                                                                    </Fragment>
-                                                                )
-
-                                                            :
-
-                                                                <>
-                                                                </>
-                                                            
-                                                            }
-
-                                                            {getUserProfile.average_rate !== null ?
-
-                                                                Array.from(Array(5 - Number(getUserProfile.average_rate))).map( (elem, ind) => 
-
-                                                                    <Fragment key={ind}>
-                                                                        <Image
-                                                                            key={ind}
-                                                                            className="profile--star"
-                                                                            alt="star"
-                                                                            src={emptyStar}
-                                                                            height={0}
-                                                                            width={0}
-                                                                        />
-                                                                    </Fragment>
-                                                                )
-
-                                                            :
-
-                                                                <>
-                                                                </>
-
-                                                                }
-                                                        </div>
-
-                                                    </div>
-
-                                                    {<div className="profile--user--comments">
-                                                            
-                                                            
-                                                        {Object.keys(getCommentUser).map( (elem, ind) => 
-                                                            
-                                                            <div className="user--comment--div" key={ind}>
-
-                                                                <span className="user--comment--span">
-                                                                    {(getCommentUser as any)[elem].comment}
-                                                                </span>
-                                                                <span className="user--comment--span--date">
-                                                                    {   
-                                                                        (getCommentUser as any)[elem].created_at !== undefined ?
-
-                                                                        (getCommentUser as any)[elem].created_at.substring(0, (getCommentUser as any)[elem].created_at.indexOf("T"))
-
-                                                                        :
-
-                                                                        <></>
-                                                                    }
-                                                                </span>
-                                                                
-                                                                <div className="profile--star--wrap">
-
-                                                                    {Array.from(Array((getCommentUser as any)[elem].rate)).map( (elem, ind) => 
-                                                                    
+                                                                    Array.from(Array(5)).map( (elem, ind) => 
+                                                                        
                                                                         <Fragment key={ind}>
                                                                             <Image
                                                                                 key={ind}
-                                                                                className="profile--star profile--star--comment"
-                                                                                alt="star"
-                                                                                src={filledStar}
-                                                                                height={0}
-                                                                                width={0}
-                                                                            />
-                                                                        </Fragment>
-                                                                    
-                                                                    )}
-
-                                                                    {Array.from(Array(5 - Number((getCommentUser as any)[elem].rate))).map( (elem, ind) => 
-                                                                    
-                                                                        <Fragment key={ind}>
-                                                                            <Image
-                                                                                key={ind}
-                                                                                className="profile--star profile--star--comment"
+                                                                                className="profile--star"
                                                                                 alt="star"
                                                                                 src={emptyStar}
                                                                                 height={0}
                                                                                 width={0}
                                                                             />
                                                                         </Fragment>
+                                                                    )
+
+                                                                :   getUserProfile.average_rate !== null ?
+
+                                                                    Array.from(Array(getUserProfile.average_rate)).map( (elem, ind) => 
+
+                                                                        <Fragment key={ind}>
+                                                                            <Image
+                                                                                key={ind}
+                                                                                className="profile--star"
+                                                                                alt="star"
+                                                                                src={filledStar}
+                                                                                height={0}
+                                                                                width={0}
+                                                                            />
+                                                                        </Fragment>
+                                                                    )
+
+                                                                :
+
+                                                                    <>
+                                                                    </>
+                                                                
+                                                                }
+
+                                                                {getUserProfile.average_rate !== null ?
+
+                                                                    Array.from(Array(5 - Number(getUserProfile.average_rate))).map( (elem, ind) => 
+
+                                                                        <Fragment key={ind}>
+                                                                            <Image
+                                                                                key={ind}
+                                                                                className="profile--star"
+                                                                                alt="star"
+                                                                                src={emptyStar}
+                                                                                height={0}
+                                                                                width={0}
+                                                                            />
+                                                                        </Fragment>
+                                                                    )
+
+                                                                :
+
+                                                                    <>
+                                                                    </>
+
+                                                                    }
+                                                            </div>
+
+                                                        </div>
+
+                                                        {<div className="profile--user--comments">
+                                                                
+                                                                
+                                                            {Object.keys(getCommentUser).map( (elem, ind) => 
+                                                                
+                                                                <div className="user--comment--div" key={ind}>
+
+                                                                    <span className="user--comment--span">
+                                                                        {(getCommentUser as any)[elem].comment}
+                                                                    </span>
+                                                                    <span className="user--comment--span--date">
+                                                                        {   
+                                                                            (getCommentUser as any)[elem].created_at !== undefined ?
+
+                                                                            (getCommentUser as any)[elem].created_at.substring(0, (getCommentUser as any)[elem].created_at.indexOf("T"))
+
+                                                                            :
+
+                                                                            <></>
+                                                                        }
+                                                                    </span>
                                                                     
-                                                                    )}
+                                                                    <div className="profile--star--wrap">
 
-                                                                </div>
-                                                            
-                                                                <span className="user--comment--span--firstname">
-                                                                    {(getCommentUser as any)[elem].first_name}
-                                                                </span>
+                                                                        {Array.from(Array((getCommentUser as any)[elem].rate)).map( (elem, ind) => 
+                                                                        
+                                                                            <Fragment key={ind}>
+                                                                                <Image
+                                                                                    key={ind}
+                                                                                    className="profile--star profile--star--comment"
+                                                                                    alt="star"
+                                                                                    src={filledStar}
+                                                                                    height={0}
+                                                                                    width={0}
+                                                                                />
+                                                                            </Fragment>
+                                                                        
+                                                                        )}
 
-                                                            </div> 
-                                                            
-                                                        )}
-                                                    </div>}
-                                                                                    
-                                                    <form name="profile--user--comment--form" className="profile--user--comment--form" method="POST" onSubmit={(e) => handleSubmitReviewUser(e, userContext.getUserData.id, getUserProfile.id)}>
+                                                                        {Array.from(Array(5 - Number((getCommentUser as any)[elem].rate))).map( (elem, ind) => 
+                                                                        
+                                                                            <Fragment key={ind}>
+                                                                                <Image
+                                                                                    key={ind}
+                                                                                    className="profile--star profile--star--comment"
+                                                                                    alt="star"
+                                                                                    src={emptyStar}
+                                                                                    height={0}
+                                                                                    width={0}
+                                                                                />
+                                                                            </Fragment>
+                                                                        
+                                                                        )}
 
-                                                        <label htmlFor="profile--user--comment--select--rate" className="profile--user--comment--label">Evalúa este usuario: </label>
+                                                                    </div>
+                                                                
+                                                                    <span className="user--comment--span--firstname">
+                                                                        {(getCommentUser as any)[elem].first_name}
+                                                                    </span>
 
-                                                        <select name="profile--user--comment--select--rate" className="profile--user--comment--select--rate" id="profile--user--comment--select--rate">
-                                                            
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
+                                                                </div> 
+                                                                
+                                                            )}
+                                                        </div>}
+                                                                                        
+                                                        <form name="profile--user--comment--form" className="profile--user--comment--form" method="POST" onSubmit={(e) => handleSubmitReviewUser(e, userContext.getUserData.id, getUserProfile.id)}>
 
-                                                        </select>
+                                                            <label htmlFor="profile--user--comment--select--rate" className="profile--user--comment--label">Evalúa este usuario: </label>
 
-                                                        <label htmlFor="profile--user--comment--textarea--comment" className="profile--user--comment--label">Inscribe un comentario (opcional)</label>
+                                                            <select name="profile--user--comment--select--rate" className="profile--user--comment--select--rate" id="profile--user--comment--select--rate">
+                                                                
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
 
-                                                        <textarea name="profile--user--comment--textarea--comment" className="profile--user--comment--textarea--comment" id="profile--user--comment--textarea--comment">
-                                                            
-                                                        </textarea>
+                                                            </select>
 
-                                                        <button type="submit" name="profile--user--comment--form--button" className="profile--user--comment--form--button" id="profile--user--comment--form--button">Publicar</button>
-                                                    </form>
+                                                            <label htmlFor="profile--user--comment--textarea--comment" className="profile--user--comment--label">Inscribe un comentario (opcional)</label>
 
-                                            </div>
-                                        </li>
-                                    </div>
-                                ) :
-                                <>
-                                </>
-                            }
-                        </ul>
-                    </li>
+                                                            <textarea name="profile--user--comment--textarea--comment" className="profile--user--comment--textarea--comment" id="profile--user--comment--textarea--comment">
+                                                                
+                                                            </textarea>
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Plazas libres:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.number_users.toString() == "-1" ?
+                                                            <button type="submit" name="profile--user--comment--form--button" className="profile--user--comment--form--button" id="profile--user--comment--form--button">Publicar</button>
+                                                        </form>
 
-                                "Sin límites" :
+                                                </div>
+                                            </li>
+                                        </div>
+                                    ) :
+                                    <>
+                                    </>
+                                }
+                            </ul>
+                        </li>
 
-                                (getSpecificRace.number_users - Object.keys(getUsersParticipate).length).toString()
-                            }
-                        </span>
-                    </li>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Plazas libres:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.number_users.toString() == "-1" ?
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Nivel de la carrera:
-                        </span>
-                        <span className="raceid--details--detail--value">
-                            {getSpecificRace.race_level}
-                        </span>
-                    </li>
+                                    "Sin límites" :
 
-                    <li className="main--div--raceid--details--race--ul--li">
-                        <span className="raceid--details--detail--name">
-                            Detalles adicionales:
-                        </span>
-                        <span className="raceid--details--detail--value raceid--details--detail--value--further--details">
-                            {getSpecificRace.further_details}
-                        </span>
-                    </li>
-                </ul>
+                                    (getSpecificRace.number_users - Object.keys(getUsersParticipate).length).toString()
+                                }
+                            </span>
+                        </li>
 
-                {userContext.getUserData.email.length == 0 && getSpecificRace.number_users - Object.keys(getUsersParticipate).length == 0 ?
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Nivel de la carrera:
+                            </span>
+                            <span className="raceid--details--detail--value">
+                                {getSpecificRace.race_level}
+                            </span>
+                        </li>
 
-                        <>
-                        </>
+                        <li className="main--div--raceid--details--race--ul--li">
+                            <span className="raceid--details--detail--name">
+                                Detalles adicionales:
+                            </span>
+                            <span className="raceid--details--detail--value raceid--details--detail--value--further--details">
+                                {getSpecificRace.further_details}
+                            </span>
+                        </li>
+                    </ul>
 
-                        : filterUserParticipate() > 0 ?
-                        
-                        <>
-                        <div className="chat--race--users">
-                            <span className="raceid--details--detail--name chat--race">Conversación:</span>
+                    {userContext.getUserData.email.length == 0 && getSpecificRace.number_users - Object.keys(getUsersParticipate).length == 0 ?
+
+                            <>
+                            </>
+
+                            : filterUserParticipate() > 0 ?
                             
-                            <div className="chat--race--users--chat">
-
-                                <div className="chat--race--users--chat--message--div fake--div">
-                                    <span className="chat--race--users--chat--message--div--span--user">User:</span>
-                                    <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
-                                    <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
-                                </div>
-
-                                <div className="chat--race--users--chat--message--div fake--div">
-                                    <span className="chat--race--users--chat--message--div--span--user">User:</span>
-                                    <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
-                                    <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
-                                </div>
+                            <>
+                            <div className="chat--race--users">
+                                <span className="raceid--details--detail--name chat--race">Conversación:</span>
                                 
+                                <div className="chat--race--users--chat">
+
+                                    <div className="chat--race--users--chat--message--div fake--div">
+                                        <span className="chat--race--users--chat--message--div--span--user">User:</span>
+                                        <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
+                                        <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
+                                    </div>
+
+                                    <div className="chat--race--users--chat--message--div fake--div">
+                                        <span className="chat--race--users--chat--message--div--span--user">User:</span>
+                                        <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
+                                        <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
+                                    </div>
+                                    
+                                </div>
+
+                                <form className="chat--race--users--form--send--message" method="POST">
+
+                                    <input type="text" className="chat--race--users--form--send--message--input" name="chat--race--users--form--send--message--input" id="chat--race--users--form--send--message--input" />
+
+                                    <button type="submit" className="chat--race--users--button--send" name="chat--race--users--button--send" onClick={(e)=> handleClickSendMessageRace(e, parseInt(params.race_id), userContext.getUserData.email, userContext.getUserData.id, userContext.getUserData.firstName)}>Enviar</button>
+                                </form>
                             </div>
 
-                            <form className="chat--race--users--form--send--message" method="POST">
 
-                                <input type="text" className="chat--race--users--form--send--message--input" name="chat--race--users--form--send--message--input" id="chat--race--users--form--send--message--input" />
+                            {userContext.getUserData.id == getSpecificRace.user_id ? 
+                                <>
 
-                                <button type="submit" className="chat--race--users--button--send" name="chat--race--users--button--send" onClick={(e)=> handleClickSendMessageRace(e, parseInt(params.race_id), userContext.getUserData.email, userContext.getUserData.id, userContext.getUserData.firstName)}>Enviar</button>
-                            </form>
-                        </div>
+                                <Link className="update--anchor--link" href={`/races/update/${params.race_id}`}>
+                                    <button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate--update" type="button" name="main--div--register--form--button--submit--cancel--race">
+                                    Modificar los datos
+                                    </button>
+                                </Link>
 
-
-                        {userContext.getUserData.id == getSpecificRace.user_id ? 
-                            <>
-
-                            <Link className="update--anchor--link" href={`/races/update/${params.race_id}`}>
-                                <button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate--update" type="button" name="main--div--register--form--button--submit--cancel--race">
-                                Modificar los datos
+                                {<button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit--cancel--race" onClick={handleClickCancelParticipateRaceConfirmBox}>
+                                    Cancelar la carrera
+                                    <span className="cancel--button--race--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
+                                    <span className="cancel--button--race--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
+                                </button>}
+                                
+                                </>
+                                :
+                        
+                                <button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit--cancel--user" onClick={handleClickCancelParticipateRaceConfirmBox}>
+                                    Cancelar mi participación
+                                    <span className="cancel--button--participate--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
+                                    <span className="cancel--button--participate--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
                                 </button>
-                            </Link>
+                            }
+                                {/*<button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit" onClick={handleClickCancelParticipateRaceConfirmBox}>
+                                    Cancelar mi participación
+                                    <span className="cancel--button--participate--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
+                                    <span className="cancel--button--participate--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
+                                </button>*/}
 
-                            {<button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit--cancel--race" onClick={handleClickCancelParticipateRaceConfirmBox}>
-                                Cancelar la carrera
-                                <span className="cancel--button--race--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
-                                <span className="cancel--button--race--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
-                            </button>}
-                            
+
                             </>
+                            
+                            : filterUserParticipate() == 0 && getSpecificRace.number_users - Object.keys(getUsersParticipate).length == 0 ?
+
+                            <>
+                            </>
+
                             :
-                    
-                            <button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit--cancel--user" onClick={handleClickCancelParticipateRaceConfirmBox}>
-                                Cancelar mi participación
-                                <span className="cancel--button--participate--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
-                                <span className="cancel--button--participate--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
-                            </button>
-                        }
-                            {/*<button className="main--div--register--form--button--submit button--submit--participate cancel--button--participate" type="button" name="main--div--register--form--button--submit" onClick={handleClickCancelParticipateRaceConfirmBox}>
-                                Cancelar mi participación
-                                <span className="cancel--button--participate--span--yes" onClick={(e) => handleClickCancelParticipateRace(e, parseInt(params.race_id), userContext.getUserData.email ,userContext.getUserData.id)}>Sí</span>
-                                <span className="cancel--button--participate--span--no" onClick={handleClickCancelParticipateRaceNo}>No</span>
-                            </button>*/}
 
+                            <button className="main--div--register--form--button--submit button--submit--participate" type="button" name="main--div--register--form--button--submit" onClick={(e) => handleClickParticipateRace(e, parseInt(params.race_id), getSpecificRace.race_date, getSpecificRace.race_time)}>Participar</button>
 
-                        </>
-                        
-                        : filterUserParticipate() == 0 && getSpecificRace.number_users - Object.keys(getUsersParticipate).length == 0 ?
+                            
+                    }
 
-                        <>
-                        </>
+                </div>
 
-                        :
-
-                        <button className="main--div--register--form--button--submit button--submit--participate" type="button" name="main--div--register--form--button--submit" onClick={(e) => handleClickParticipateRace(e, parseInt(params.race_id), getSpecificRace.race_date, getSpecificRace.race_time)}>Participar</button>
-
-                        
-                }
-
-            </div>
-
-        </main>
-    );
+            </main>
+        );
+    }
 }
