@@ -56,11 +56,10 @@ export default function SignIn() {
 
                 userContext.setUserDataFunction(userContext.getUserData, responseData.result);
 
-                console.log(responseData.result);
-                console.log(responseData.token);
+                
 
                 const stringUserData = JSON.stringify(responseData.result);
-                console.log(stringUserData);
+                
                 document.cookie = `user=${stringUserData};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
                 document.cookie = `token=${responseData.token};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/`;
 

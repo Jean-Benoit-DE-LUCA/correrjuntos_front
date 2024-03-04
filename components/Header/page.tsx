@@ -119,9 +119,7 @@ export default function Header(props: any) {
         router.push("/");
     };
 
-    useEffect(() => {
-        console.log(userContext.getUserData);
-    }, [userContext.getCount]);
+
 
     return (
 
@@ -158,6 +156,7 @@ export default function Header(props: any) {
                             className="header--h1--img"
                             src={runningShoe}
                             alt="shoe"
+                            priority
                             unoptimized
                         />
                         <div className="header--h1--img--wrap--div--menu" onClick={handleClickMenu}>

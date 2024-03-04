@@ -1,5 +1,30 @@
 export default function Privacy() {
 
+    const getCurrentMonth = () => {
+
+        const currentDateTime = new Date();
+
+        let month: number | string = (Number(currentDateTime.getMonth()) + 1);
+        if (month < 10) {
+            month = "0" + month;
+        }
+
+        return month;
+    };
+
+
+
+
+    const getCurrentYear = () => {
+
+        const currentDateTime = new Date();
+
+        let year = currentDateTime.getFullYear();
+
+        return year;
+    }
+    
+
     return (
 
         <main className="main">
@@ -30,7 +55,7 @@ export default function Privacy() {
             <br />
             <br />
 
-            <strong>Derechos de Privacidad:</strong> Tienes derecho a acceder, corregir, actualizar o eliminar tu información personal en cualquier momento. También puedes optar por no recibir comunicaciones de marketing enviando un correo electrónico a correrjuntos@hotmail.com
+            <strong>Derechos de Privacidad:</strong> Tienes derecho a acceder, corregir, actualizar o eliminar tu información personal en cualquier momento. También puedes optar por no recibir comunicaciones de marketing enviando un correo a través de la página de contacto.
             <br />
             <br />
 
@@ -38,9 +63,11 @@ export default function Privacy() {
             <br />
             <br />
 
-            Si tienes alguna pregunta o inquietud sobre nuestra política de privacidad, contáctanos a través de correrjuntos@hotmail.com
-
-            Última actualización: 26/02/2014
+            Si tienes alguna pregunta o inquietud sobre nuestra política de privacidad, contáctanos a través de la página de contacto.
+            <br />
+            <br />
+            
+            Última actualización: {`${getCurrentMonth()}/${getCurrentYear()}`}
 
             </p>
             

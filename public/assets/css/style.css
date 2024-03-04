@@ -74,8 +74,9 @@ body {
 .chat--race--users--chat {
     height: 78%;
     padding: 0.5rem 0.2rem 0.5rem 0.2rem;
-    margin-bottom: 0.5rem;
     overflow-y: scroll;
+    margin: 1rem auto 0.5rem auto;
+    box-shadow: 0px 0px 10px 0px #e1e1e1;
 }
 
 .chat--race--users--chat--message--div.fake--div {
@@ -108,15 +109,23 @@ body {
 
 .chat--race--users--button--send {
     font-size: 1rem;
-    letter-spacing: 2px;
-    height: 1.3rem;
+    letter-spacing: .15rem;
+    height: 1.4rem;
     width: 6rem;
     margin: 0 auto;
     display: block;
-    background-color: var(--colorTitle);
+    background: var(--colorTitle);
     border: 2px groove var(--borderColor);
     border-radius: 5px;
     cursor: pointer;
+    transition: all .25s;
+}
+.chat--race--users--button--send:hover {
+    transition: all .25s;
+    letter-spacing: .095rem;
+    font-weight: bold;
+    background: #58bdc9c2;
+    color: #f9f9f9;
 }
 
 .chat--race--users--form--send--message--input {
@@ -235,7 +244,10 @@ body {
 }
 
 .error--div.profile {
-    top: -11%;
+    position: fixed;
+    left: -70%;
+    transform: translate(-50%, 0);
+    top: 14rem;
 }
 
 .error--div.find {
@@ -250,6 +262,7 @@ body {
     visibility: visible;
     opacity: 1;
     left: 50%;
+    z-index: 1;
 }
 
 .error--div.error--div--race {
@@ -484,7 +497,7 @@ body {
     height: 20px;
     width: 20px;
     position: absolute;
-    top: 10rem;
+    top: 13.6rem;
     right: 1rem;
     cursor: pointer;
 }
@@ -594,6 +607,12 @@ body {
     position: relative;
 }
 
+.main.races {
+    height: 157rem;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 .main.active {
     filter: blur(3px);
 }
@@ -638,7 +657,7 @@ body {
     height: 15rem;
 }
 .main--div--form--fieldset.fieldset--howmany--users.update--race {
-    height: 28rem;
+    height: 29rem;
 }
 
 .main--div--form--fieldset.fieldset--race--level {
@@ -686,7 +705,8 @@ body {
 }
 
 .main--div--picture--wrap {
-    background-color: rgb(178 203 214);
+    /* background-color: rgb(178 203 214); */
+    background-color: inherit;
     width: 100%;
     margin: 0 auto;
 }
@@ -999,6 +1019,7 @@ body {
     border-width: 2px;
     height: 10rem;
     resize: none;
+    outline-color: var(--secondaryBorderColor);
 }
 
 .main--div--register--form--wrap--label--input {
@@ -1029,6 +1050,14 @@ body {
     cursor: pointer;
     height: 1.6rem;
     position: relative;
+    transition: all .25s;
+}
+
+.main--div--register--form--button--submit:hover, .profile--user--comment--form--button:hover {
+    transition: all .25s;
+    font-weight: bold;
+    background: #58bdc9c2;
+    color: #f9f9f9;
 }
 
 .hover--button--span {
@@ -1104,6 +1133,13 @@ body {
     display: block;
     margin: 1rem auto;
     cursor: pointer;
+    transition: .25s;
+}
+.main--div--signin--form--button--submit:hover {
+    transition: all .25s;
+    font-weight: bold;
+    background: #58bdc9c2;
+    color: #f9f9f9;
 }
 
 .main--div--ul--last--races {
@@ -1111,6 +1147,8 @@ body {
     list-style-type: none;
     margin: 1rem 0 1rem 0;
     width: 100%;
+    max-height: 100rem;
+    overflow-y: scroll;
 }
 
 .main--div--ul--last--races--anchor {
@@ -1152,11 +1190,22 @@ body {
 .main--div--ul--last--races--anchor.low--level {
     background: linear-gradient(to right, var(--colorTitle) 5%, var(--lowLevel) 100%);
 }
+.main--div--ul--last--races--anchor.low--level:hover {
+    background: linear-gradient(to right, var(--lowLevel) 5%, var(--lowLevel) 100%);
+}
+
 .main--div--ul--last--races--anchor.mid--level {
     background: linear-gradient(to right, var(--colorTitle) 5%, var(--midLevel) 100%);
 }
+.main--div--ul--last--races--anchor.mid--level:hover {
+    background: linear-gradient(to right, var(--midLevel) 5%, var(--midLevel) 100%);
+}
+
 .main--div--ul--last--races--anchor.high--level {
     background: linear-gradient(to right, var(--colorTitle) 5%, var(--highLevel) 100%);
+}
+.main--div--ul--last--races--anchor.high--level:hover {
+    background: linear-gradient(to right, var(--highLevel) 5%, var(--highLevel) 100%);
 }
 
 .main--div--ul--last--races--anchor:hover {
@@ -1290,6 +1339,13 @@ body {
     display: block;
     margin: 1rem auto;
     cursor: pointer;
+    transition: all .25s;
+}
+.main--form--findrunners--button--submit:hover {
+    transition: all .25s;
+    font-weight: bold;
+    background: #58bdc9c2;
+    color: #f9f9f9;
 }
 
 .main--form--findrunners--checkbox--male--wrap--div, .main--form--findrunners--checkbox--female--wrap--div {
@@ -1543,12 +1599,16 @@ body {
     padding: 0;
     font-family: var(--mainFont);
     width: 85%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .profile--review--ul--li {
     background-color: var(--secondaryBorderColor);
     margin-top: 1rem;
     position: relative;
+    border-radius: .7rem;
 }
 
 .profile--review--ul--li.remove {
@@ -1561,6 +1621,17 @@ body {
     right: 0;
     border: 0;
     cursor: pointer;
+    border-top-right-radius: .7rem;
+    transition: all .25s;
+}
+.profile--review--ul--li--button--delete:hover {
+    background: #00000029;
+    color: var(--colorTitle);
+}
+
+.profile--review--ul--li--button--delete--confirm--div--span--text {
+    text-align: center;
+    display: block;
 }
 
 .profile--review--ul--li--button--delete--div--wrap {
@@ -1569,9 +1640,10 @@ body {
 
 .profile--review--ul--li--button--delete--confirm--div {
     position: absolute;
-    left: -8.51rem;
-    top: 2rem;
-    width: 9.4rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
     background: #f14c4c;
     font-size: .9rem;
     padding: 0.3rem;
@@ -1579,6 +1651,9 @@ body {
     visibility: hidden;
     opacity: 0;
     transition: opacity .5s;
+    border: 4px solid #00000059;
+    box-sizing: border-box;
+    border-radius: 15px;
 }
 
 .profile--review--ul--li--button--delete--confirm--div.active {
@@ -1599,6 +1674,12 @@ body {
     cursor: pointer;
     border: 1px solid #0000006b;
     background-color: #f0f0f0;
+    text-align: center;
+    transition: background-color .25s;
+}
+.profile--review--ul--li--button--delete--confirm--div--yes--no--div span:hover {
+    background-color: #0000006b;
+    color: #f0f0f0;
 }
 
 .profile--review--ul--li--span--comment {
@@ -1677,14 +1758,25 @@ body {
 
 .raceid--details--detail--name {
     text-decoration: underline;
+    background: #e1e1e1;
+    display: inline;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .raceid--details--detail--value {
     font-weight: bold;
 }
 
-.raceid--details--detail--name, .raceid--details--detail--value {
+.raceid--details--detail--name {
+    height: 1.7rem;
+}
+
+.raceid--details--detail--value {
     height: 2.1rem;
+}
+
+.raceid--details--detail--name, .raceid--details--detail--value {
     text-align: center;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -1722,10 +1814,18 @@ body {
 }
 
 .raceid--details--detail--value--further--details {
-    height: 10rem;
+    height: 12rem;
     word-wrap: break-word;
+    white-space: break-spaces;
     overflow-y: scroll;
-    padding: .3rem;
+    padding-top: 1rem;
+    padding-left: 0.9rem;
+    text-align: left;
+    margin-top: 1rem;
+    line-height: 2rem;
+    width: 85%;
+    margin: 1rem auto 0 auto;
+    box-shadow: 0px 0px 10px 0px #e1e1e1;
 }
 
 .scroll--animation--left {
@@ -2032,20 +2132,29 @@ body {
 .ul--list--registered--users--race--li--profile::-webkit-scrollbar, 
 .profile--user--comments::-webkit-scrollbar, 
 .profile--user--comment--textarea--comment::-webkit-scrollbar,
-.chat--race--users--chat::-webkit-scrollbar {
+.chat--race--users--chat::-webkit-scrollbar,
+.profile--review--ul::-webkit-scrollbar,
+.main--div--ul--last--races::-webkit-scrollbar,
+.raceid--details--detail--value--further--details::-webkit-scrollbar {
     background-color: transparent;
     width: 8px;
 }
 .ul--list--registered--users--race--li--profile::-webkit-scrollbar-track, 
 .profile--user--comments::-webkit-scrollbar-track, 
 .profile--user--comment--textarea--comment::-webkit-scrollbar-track, 
-.chat--race--users--chat::-webkit-scrollbar-track {
+.chat--race--users--chat::-webkit-scrollbar-track,
+.profile--review--ul::-webkit-scrollbar-track,
+.main--div--ul--last--races::-webkit-scrollbar-track,
+.raceid--details--detail--value--further--details::-webkit-scrollbar-track {
     background-color: transparent;
 }
 .ul--list--registered--users--race--li--profile::-webkit-scrollbar-thumb, 
 .profile--user--comments::-webkit-scrollbar-thumb, 
 .profile--user--comment--textarea--comment::-webkit-scrollbar-thumb, 
-.chat--race--users--chat::-webkit-scrollbar-thumb {
+.chat--race--users--chat::-webkit-scrollbar-thumb,
+.profile--review--ul::-webkit-scrollbar-thumb,
+.main--div--ul--last--races::-webkit-scrollbar-thumb,
+.raceid--details--detail--value--further--details::-webkit-scrollbar-thumb {
     background-color: rgb(209, 209, 209);
 }
 
@@ -2190,6 +2299,10 @@ body {
     .title--div--wrap.two {
         padding-left: 1.6rem;
     }
+
+    .raceid--details--detail--name {
+        width: 80%;
+    }
 }
 
 
@@ -2206,10 +2319,13 @@ body {
 
     .chat--race--users--button--send {
         font-size: 1.1rem;
-        letter-spacing: 3px;
+        letter-spacing: .2rem;
         height: 1.7rem;
         padding-top: 0.1rem;
         width: 7rem;
+    }
+    .chat--race--users--button--send:hover {
+        letter-spacing: .15rem;
     }
 
     .filter--button {
@@ -2275,8 +2391,18 @@ body {
 
     }
 
-    .raceid--details--detail--name, .raceid--details--detail--value {
+    .raceid--details--detail--name {
+        height: 1.9rem;
+    }
+
+    .raceid--details--detail--value {
         height: 2.3rem;
+    }
+    .raceid--details--detail--value--further--details {
+        height: 12rem;
+    }
+
+    .raceid--details--detail--name, .raceid--details--detail--value {
         font-size: 1.1rem;
     }
 
@@ -2292,6 +2418,12 @@ body {
     .male--icon {
         height: 20px;
         width: 20px;
+    }
+
+    .profile--review--ul--li--button--delete {
+        height: 1.3rem;
+        width: 2rem;
+        font-size: 1.1rem;
     }
 
     .profile--star {
@@ -2488,7 +2620,7 @@ body {
     .image--switch {
         height: 2.5rem;
         width: 2rem;
-        top: 9rem;
+        top: 15rem;
         right: 10%;
     }
 
@@ -2519,8 +2651,13 @@ body {
         font-size: 1.6rem;
     }
 
+    .main--div--register--form--input--hour--start.maximum--users {
+        height: 1.5rem;
+        font-size: 1.2rem;
+    }
+
     .main--div--signin {
-        height: 18rem;
+        height: 20rem;
     }
 
     .main--div--ul--last--races--anchor {
@@ -2547,7 +2684,7 @@ body {
         height: 1.8rem;
     }
 
-    .main--div--register--form--wrap--label--input input, .main--div--signin--form--button--submit {
+    .main--div--register--form--wrap--label--input input, .main--div--signin--form--button--submit, .main--div--register--form--textarea--message {
         font-size: 1.2rem;
     }
 
@@ -2603,7 +2740,7 @@ body {
     }
 
     .main--div--form--fieldset.fieldset--howmany--users {
-        height: 17rem;
+        height: 19rem;
     }
 
     .main--form--findrunners--undefined--checkbox {
@@ -2625,11 +2762,26 @@ body {
     }
 
     .main--div--proposerace--form--textarea--furthersdetails {
+        font-size: 1.2rem;
         height: 9rem;
+    }
+    
+    .profile--review--ul--li--button--delete--confirm--div--yes--no--div {
+        font-size: 1rem;
+    }
+
+    .raceid--details--detail--name {
+        height: 2rem;
+    }
+
+    .raceid--details--detail--value {
+        height: 2.5rem;
+    }
+    .raceid--details--detail--value--further--details {
+        height: 16rem;
     }
 
     .raceid--details--detail--name, .raceid--details--detail--value {
-        height: 2.5rem;
         font-size: 1.2rem;
     }
 
@@ -2755,6 +2907,20 @@ body {
     .legend--div--section .legend--low--span--color {
         position: relative;
         bottom: 0.3rem;
+    }
+
+    .main--form--findrunners--hour--box select {
+        width: 7rem;
+        height: 1.8rem;
+        font-size: 1.2rem;
+    }
+
+    .main--div--form--proposerace--where {
+        font-size: 1.5rem;
+    }
+
+    .main--div--form--fieldset.fieldset--when {
+        height: 14rem;
     }
 
     .main--div--raceid--participate--span {
@@ -2923,12 +3089,44 @@ body {
         width: 34rem;
     }
 
+    .profile--review--ul--li {
+        margin-top: 3rem;
+    }
+
+    .profile--review--ul--li--span--firstname, .profile--review--ul--li--span--comment {
+        font-size: 1.3rem;
+    }
+
+    .profile--review--ul--li--span--datetime {
+        font-size: .9rem;
+    }
+
+    .profile--review--ul--li--button--delete--confirm--div {
+        font-size: 1rem;
+        width: 20rem;
+        height: 6rem;
+    }
+
     .raceid--details--detail--name.chat--race {
         font-size: 1.3rem;
     }
 
-    .raceid--details--detail--name, .raceid--details--detail--value {
+    .raceid--details--detail--name {
+        width: 20rem;
+        height: 2.2rem;
+    }
+
+    .raceid--details--detail--value {
         height: 2.8rem;
+    }
+    .raceid--details--detail--value--further--details {
+        height: 16rem;
+        width: 22rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .raceid--details--detail--name, .raceid--details--detail--value {
         font-size: 1.3rem;
     }
 
@@ -3015,6 +3213,10 @@ body {
     .total--my--races {
         font-size: 1rem;
     }
+
+    .ul--list--registered--users--race--li {
+        font-size: 1.2rem;
+    }
 }
 
 
@@ -3042,8 +3244,13 @@ body {
     .image--switch {
         height: 3.5rem;
         width: 2.5rem;
-        top: 9rem;
+        /* top: 9rem; */
         right: 10%;
+    }
+
+    .main--div--register--form--textarea--message {
+        height: 15rem;
+        width: 30rem;
     }
 
     .main--div--register.main--div--profile--review, .main--div--register.main--div--profile--review.active {
@@ -3135,6 +3342,12 @@ body {
         margin-left: 50%;
     }
 
+    .profile--review--ul--li--button--delete--confirm--div {
+        font-size: 1.1rem;
+        width: 21rem;
+        height: 6rem;
+    }
+
     .scroll--animation--left {
         transform: translateX(-10.5rem);
     }
@@ -3222,6 +3435,10 @@ body {
         margin-left: 5rem;
         margin-right: 5rem;
         font-size: 1.25rem;
+    }
+
+    .main--div.main--div--register.main--div--signin {
+        height: 21rem;
     }
 
     .main--div--register--title {
@@ -3351,6 +3568,10 @@ body {
         width: 37rem;
     }
 
+    .main--div--register--form--textarea--message.contact {
+        width: 32rem;
+    }
+
     .main--div--video, .main--div--video--title {
         height: 30rem;
         width: 53.2rem;
@@ -3400,6 +3621,10 @@ body {
 
     .header--h1--wrap--anchor--menu, .back--img--anchor--wrap {
         width: 71rem;
+    }
+
+    .image--switch {
+        right: 15%;
     }
 
     .nav--ul--anchor:nth-of-type(1).active, .nav--ul--anchor:nth-of-type(2).active, .nav--ul--anchor:nth-of-type(3).active, .nav--ul--anchor:nth-of-type(4).active, .nav--ul--anchor:nth-of-type(5).active, .nav--ul--anchor:nth-of-type(6).active, .nav--ul--anchor:nth-of-type(7).active {

@@ -136,7 +136,7 @@ export default function ProposeRace() {
             });
 
             const responseData = await response.json();
-            console.log(responseData);
+            
             
             if (responseData.hasOwnProperty("bodyResponse")) {
 

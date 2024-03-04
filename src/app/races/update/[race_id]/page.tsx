@@ -356,7 +356,7 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
         return () => clearInterval(timer);
     }, [getSpecificRace]);
 
-    console.log(getSpecificRace);
+    
 
 
 
@@ -399,7 +399,7 @@ export default function UpdateRace({params}: {params: {race_id: string}}) {
     if (!isLoading) {
 
         return (
-            <main className="main">
+            <main className="main races">
 
                 <BackButton pathname={utilsContext.backButton}/>
 

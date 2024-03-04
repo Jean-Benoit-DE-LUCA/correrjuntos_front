@@ -124,7 +124,7 @@ export default function MyRaces() {
 
                     if (newObj[elemRace].id == newObjCount[elemCount].id) {
 
-                    newObj[elemRace]["number_users_registered"] = newObjCount[elemCount].number_users_registered;
+                        newObj[elemRace]["number_users_registered"] = newObjCount[elemCount].number_users_registered;
                     }
                 });
             });

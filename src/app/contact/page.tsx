@@ -104,7 +104,7 @@ export default function Contact() {
 
         <BackButton pathname={utilsContext.backButton}/>
 
-            <h2 className=" contact">Si tienes alguna pregunta, no dudes en contactarnos</h2>
+            <h2 className="main--h2 contact">Si tienes alguna pregunta, no dudes en contactarnos</h2>
             
             <div className="main--div main--div--register">
 
@@ -144,7 +144,7 @@ export default function Contact() {
                         <label className="main--div--register--form--label" htmlFor="main--div--register--form--textarea--message">
                             Mensaje*:
                         </label>
-                        <textarea className="main--div--register--form--textarea--message" name="main--div--register--form--textarea--message" id="main--div--register--form--textarea--message"></textarea>
+                        <textarea className="main--div--register--form--textarea--message contact" name="main--div--register--form--textarea--message" id="main--div--register--form--textarea--message"></textarea>
                     </div>
 
                     

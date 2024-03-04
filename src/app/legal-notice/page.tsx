@@ -1,6 +1,32 @@
 "use client";
 
+import { useEffect } from "react";
+
 export default function LegalNotice() {
+
+    const getCurrentMonth = () => {
+
+        const currentDateTime = new Date();
+
+        let month: number | string = (Number(currentDateTime.getMonth()) + 1);
+        if (month < 10) {
+            month = "0" + month;
+        }
+
+        return month;
+    };
+
+
+
+
+    const getCurrentYear = () => {
+
+        const currentDateTime = new Date();
+
+        let year = currentDateTime.getFullYear();
+
+        return year;
+    }
 
     return (
 
@@ -38,11 +64,11 @@ export default function LegalNotice() {
                 <br />
                 <br />
 
-                Al utilizar este sitio web, usted acepta cumplir con estos términos y condiciones de uso. Si tiene alguna pregunta o inquietud sobre este aviso legal, contáctenos a través de correrjuntos@hotmail.com
+                Al utilizar este sitio web, usted acepta cumplir con estos términos y condiciones de uso. Si tiene alguna pregunta o inquietud sobre este aviso legal, contáctenos a través de la página de contacto.
                 <br />
                 <br />
                 
-                Fecha de última actualización: 25/02/2024
+                Última actualización: {`${getCurrentMonth()}/${getCurrentYear()}`}
 
                 </p>
 

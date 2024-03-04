@@ -146,7 +146,11 @@ export default function Profile() {
 
             document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
             divErrorPelement.textContent = "Gracias por completar todos los campos vacíos."
-            divError.classList.add("active");
+            
+            setTimeout(() => {
+
+                divError.classList.add("active");
+            }, 300);
 
             setTimeout(() => {
                 divError.classList.remove("active");
@@ -162,7 +166,11 @@ export default function Profile() {
 
             document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
             divErrorPelement.textContent = "Las contraseñas no coinciden.";
-            divError.classList.add("active");
+            
+            setTimeout(() => {
+
+                divError.classList.add("active");
+            }, 300);
 
             setTimeout(() => {
                 divError.classList.remove("active");
@@ -215,7 +223,11 @@ export default function Profile() {
 
                     document.documentElement.style.setProperty("--divErrorColor", "#0eab2a");
                     divErrorPelement.textContent = "Perfil modificado con éxito.";
-                    divError.classList.add("active");
+                    
+                    setTimeout(() => {
+
+                        divError.classList.add("active");
+                    }, 300);
 
                     setTimeout(() => {
                         divError.classList.remove("active");
@@ -271,7 +283,11 @@ export default function Profile() {
 
                         document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
                         divErrorPelement.textContent = "El tamaño del archivo excede el máximo permitido (5 MB)";
-                        divError.classList.add("active");
+                        
+                        setTimeout(() => {
+
+                            divError.classList.add("active");
+                        }, 300);
 
                         setTimeout(() => {
                             divError.classList.remove("active");
@@ -287,7 +303,11 @@ export default function Profile() {
 
                         document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
                         divErrorPelement.textContent = "Extensión de archivo no aceptada";
-                        divError.classList.add("active");
+                        
+                        setTimeout(() => {
+
+                            divError.classList.add("active");
+                        }, 300);
 
                         setTimeout(() => {
                             divError.classList.remove("active");
@@ -348,7 +368,7 @@ export default function Profile() {
 
         e.preventDefault();
         
-        (e.currentTarget.getElementsByClassName("profile--review--ul--li--button--delete--confirm--div")[0] as HTMLDivElement).classList.add("active");
+        ((e.currentTarget.parentElement as HTMLDivElement).getElementsByClassName("profile--review--ul--li--button--delete--confirm--div")[0] as HTMLDivElement).classList.add("active");
     };
 
 
@@ -363,14 +383,11 @@ export default function Profile() {
         e.preventDefault();
         e.stopPropagation();
 
-        const liParentElement = e.currentTarget.parentElement?.parentElement?.parentElement?.parentElement?.parentElement;
+        const liParentElement = e.currentTarget.parentElement?.parentElement?.parentElement;
 
-        liParentElement?.classList.add("remove");
+        const divError = (document.getElementsByClassName("error--div")[0] as HTMLDivElement);
+        const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
 
-        setTimeout(() => {
-
-            liParentElement?.remove();
-        }, 600);
 
         //
 
@@ -385,7 +402,48 @@ export default function Profile() {
 
         const responseData = await response.json();
 
-        console.log(responseData);
+        if (responseData.hasOwnProperty("flag")) {
+
+            if (responseData.flag) {
+
+                liParentElement?.classList.add("remove");
+
+                setTimeout(() => {
+
+                    liParentElement?.remove();
+                }, 600);
+            }
+
+            else if (!responseData.flag) {
+
+                const divConfirmElements = (document.getElementsByClassName("profile--review--ul--li--button--delete--confirm--div") as HTMLCollectionOf<HTMLDivElement>);
+
+                for (let i = 0; i < divConfirmElements.length; i++) {
+
+                    divConfirmElements[i].classList.remove("active");
+                }
+
+
+
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+                document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                divErrorPelement.textContent = "Por favor, autentíquese de nuevo.";
+                
+                setTimeout(() => {
+
+                    divError.classList.add("active");
+                }, 300);
+
+                setTimeout(() => {
+                    divError.classList.remove("active");
+                }, 3000);
+            }
+        }
     };
 
 
@@ -440,6 +498,8 @@ export default function Profile() {
     useEffect(() => {
 
         utilsContext.setBackButton(window.location.pathname);
+
+        document.documentElement.style.setProperty("--rotateNumber", "180");
 
         setTimeout(() => {
 
@@ -653,16 +713,26 @@ export default function Profile() {
                                     <div className="profile--review--ul--li--button--delete--div--wrap">
                                         <span className="profile--review--ul--li--button--delete--span">X</span>
 
-                                        <div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
+                                        {/*<div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
                                             <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
 
                                             <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
                                                 <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes" onClick={(e) => handleClickConfirmDeleteReview(e, (fetchReviews as any)[elem].review_id)}>Sí</span>
                                                 <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
                                             </div>
-                                        </div>
+                                        </div>*/}
                                     </div>
+
                                 </button>
+
+                                <div className="profile--review--ul--li--button--delete--confirm--div" data-id-review={(fetchReviews as any)[elem].review_id}>
+                                    <span className="profile--review--ul--li--button--delete--confirm--div--span--text">¿Estás seguro de eliminar esta reseña?"</span>
+
+                                    <div className="profile--review--ul--li--button--delete--confirm--div--yes--no--div">
+                                        <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--yes" onClick={(e) => handleClickConfirmDeleteReview(e, (fetchReviews as any)[elem].review_id)}>Sí</span>
+                                        <span className="profile--review--ul--li--button--delete--confirm--div--yes--no--div--no" onClick={(e) => handleClickCancelDeleteReview(e, (fetchReviews as any)[elem].review_id)}>No</span>
+                                    </div>
+                                </div>
 
                                 <div className="profile--review--ul--li--div">
 
@@ -707,9 +777,9 @@ export default function Profile() {
                         )}
                     </ul>
 
-                    <div className="main--div--register--form profile--opinion">
+                    {/*<div className="main--div--register--form profile--opinion">
 
-                    </div>
+                    </div>*/}
                 </div>
             </main>
         );

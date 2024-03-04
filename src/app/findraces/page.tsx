@@ -85,15 +85,7 @@ export default function FindRaces() {
 
         const divResultRaces = (document.getElementsByClassName("main--div my--races")[0] as HTMLDivElement);
 
-        console.log(idRace.value);
-        console.log(city.value);
-        console.log(user.value);
-        console.log(dateStart.value);
-        console.log(dateEnd.value);
-        console.log(allDatesCheckBox.checked);
-        console.log(hourStart.value);
-        console.log(hourEnd.value);
-        console.log(allHoursCheckBox.checked);
+
 
         // reset list races //
 
@@ -121,7 +113,7 @@ export default function FindRaces() {
 
             const responseData = await response.json();
 
-            console.log(responseData);
+            
 
             if (responseData.hasOwnProperty("error")) {
 
@@ -183,7 +175,7 @@ export default function FindRaces() {
 
             const responseData = await response.json();
 
-            console.log(responseData);
+            
 
             if (Object.keys(responseData).length > 0) {
 
@@ -208,7 +200,7 @@ export default function FindRaces() {
         utilsContext.setBackButton(window.location.pathname);
     }, [])
 
-    console.log(fetchRaces);
+    
 
     return (
         <main className="main">

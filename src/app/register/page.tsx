@@ -168,7 +168,7 @@ export default function Register() {
         utilsContext.setBackButton(window.location.pathname);
     }, []);
 
-    console.log(userContext.getUserData);
+    
 
 
     return (

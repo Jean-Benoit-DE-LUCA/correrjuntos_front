@@ -76,10 +76,19 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         const response = await fetch(`http://localhost:8080/api/race/findrace/${race_id}`);
         const responseData = await response.json();
 
-        const newObjRaceInfo = Object.assign({}, responseData.race_info);
-        const newObjUsersParticipate = Object.assign({}, responseData.users_participate);
-        setSpecificRace(newObjRaceInfo);
-        setUsersParticipate(newObjUsersParticipate);
+        if (responseData.hasOwnProperty("error")) {
+
+            userContext.setMessage("Esta carrera no existe.");
+            router.push("/");
+        }
+
+        else {
+
+            const newObjRaceInfo = Object.assign({}, responseData.race_info);
+            const newObjUsersParticipate = Object.assign({}, responseData.users_participate);
+            setSpecificRace(newObjRaceInfo);
+            setUsersParticipate(newObjUsersParticipate);
+        }
     };
 
     const fetchMessage = async (race_id: number) => {
@@ -123,8 +132,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
         const currentDateTime = dateTime.getFullYear() + "-" + month.toString() + "-" + day.toString() + " " + dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + second.toString();
 
-        console.log(currentDateTime);
-        console.log(raceDateTime < currentDateTime);
+        
 
         
 
@@ -230,7 +238,13 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
                             divError.classList.remove("active");
                         }, 3000);
 
-                        setCountFlag(countFlag + 1);
+                        //setCountFlag(countFlag + 1);
+
+                        setTimeout(() => {
+
+                            window.location.reload();
+                        }, 1000);
+                        
                     }
                 }
 
@@ -442,6 +456,9 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
         const inputMessage = (document.getElementsByClassName("chat--race--users--form--send--message--input")[0] as HTMLInputElement);
 
+        const divError = (document.getElementsByClassName("error--div error--div--race")[0] as HTMLDivElement);
+        const divErrorPelement = (document.getElementsByClassName("error--div--p")[0]);
+
         e.preventDefault();
 
         if (inputMessage.value == "") {
@@ -459,7 +476,12 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
                 month = "0" + month;
             }
 
-            const currentDateTime = date.getFullYear() + "-" + month + "-" + date.getDate() + " " + new Date().toLocaleTimeString([], {hour12: false});
+            let day: number | string = Number(date.getUTCDate());
+            if (day < 10) {
+                day = "0" + day;
+            }
+
+            const currentDateTime = date.getFullYear() + "-" + month + "-" + day + " " + new Date().toLocaleTimeString([], {hour12: false});
 
             //createMessage(firstName, inputMessage.value, currentDateTime);
 
@@ -480,24 +502,51 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
             });
 
             const responseData = await response.json();
-            console.log(responseData);
+            
+            
+
+            // if race does not exist //
+
+            if (responseData.hasOwnProperty("error")) {
+
+                if (responseData.error.startsWith("Race does not exist")) {
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+    
+                    document.documentElement.style.setProperty("--divErrorColor", "#ff0000");
+                    divErrorPelement.textContent = "La carrera ha sido eliminada.";
+                    divError.classList.add("active");
+        
+                    setTimeout(() => {
+                        divError.classList.remove("active");
+                    }, 3000);
+                }
+            }
 
 
 
 
-            socket.send(JSON.stringify({
-                inputMessage: inputMessage.value,
-                raceId: raceId,
-                userId: userId,
-                firstName: firstName,
-                email: email,
-                currentDateTime: currentDateTime
-            }));
+            // if race exist //
 
-            inputMessage.value = "";
-            inputMessage.focus();
+            else {
 
-            //setCountFlag(countFlag + 1);
+                socket.send(JSON.stringify({
+                    inputMessage: inputMessage.value,
+                    raceId: raceId,
+                    userId: userId,
+                    firstName: firstName,
+                    email: email,
+                    currentDateTime: currentDateTime
+                }));
+
+                inputMessage.value = "";
+                inputMessage.focus();
+
+                //setCountFlag(countFlag + 1);
+            }
         }
     };
 
@@ -505,30 +554,33 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
         const divChat = (document.getElementsByClassName("chat--race--users--chat")[0] as HTMLDivElement);
 
-        const divWrap = document.createElement("div");
-        divWrap.setAttribute("class", "chat--race--users--chat--message--div");
+        if (divChat !== undefined) {
 
-        const spanUserElement = document.createElement("span");
-        spanUserElement.setAttribute("class", "chat--race--users--chat--message--div--span--user");
-        spanUserElement.textContent = firstName + ":";
+            const divWrap = document.createElement("div");
+            divWrap.setAttribute("class", "chat--race--users--chat--message--div");
 
-        const spanMessageElement = document.createElement("span");
-        spanMessageElement.setAttribute("class", "chat--race--users--chat--message--div--span--message");
-        spanMessageElement.textContent = message;
+            const spanUserElement = document.createElement("span");
+            spanUserElement.setAttribute("class", "chat--race--users--chat--message--div--span--user");
+            spanUserElement.textContent = firstName + ":";
 
-        const spanDateTimeElement = document.createElement("span");
-        spanDateTimeElement.setAttribute("class", "chat--race--users--chat--message--div--span--datetime");
-        spanDateTimeElement.textContent = dateTime;
+            const spanMessageElement = document.createElement("span");
+            spanMessageElement.setAttribute("class", "chat--race--users--chat--message--div--span--message");
+            spanMessageElement.textContent = message;
 
-        divWrap.append(spanUserElement);
-        divWrap.append(spanMessageElement);
-        divWrap.append(spanDateTimeElement);
+            const spanDateTimeElement = document.createElement("span");
+            spanDateTimeElement.setAttribute("class", "chat--race--users--chat--message--div--span--datetime");
+            spanDateTimeElement.textContent = dateTime;
 
-        divChat.append(divWrap);
+            divWrap.append(spanUserElement);
+            divWrap.append(spanMessageElement);
+            divWrap.append(spanDateTimeElement);
 
-        divChat.scrollTo({
-            top: divChat.scrollHeight
-        });
+            divChat.append(divWrap);
+
+            divChat.scrollTo({
+                top: divChat.scrollHeight
+            });
+        }
     };
 
 
@@ -607,7 +659,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         }
 
 
-        console.log(user_id);
+        
         const response = await fetch(`http://localhost:8080/api/user/get/id/${user_id}`, {
             method: "GET",
             headers: {
@@ -629,11 +681,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
         getReview(user_id);
     };
 
-    // make function above get id user to update starts when adding review //
-    const getUserProfileIdFunc = () => {
-
-        
-    };
+    
 
 
 
@@ -817,6 +865,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
     useEffect(() => {
 
         setSocket(new WebSocket("ws://localhost:8887"));
+        
 
           
         socket.onmessage = (event: {data: string}) => {
@@ -879,7 +928,7 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
 
         return (
 
-            <main className="main">
+            <main className="main races">
 
                 <BackButton pathname={utilsContext.backButton}/>
 
@@ -1249,17 +1298,15 @@ export default function RaceId( {params}: {params: {race_id: string}}) {
                                 
                                 <div className="chat--race--users--chat">
 
-                                    <div className="chat--race--users--chat--message--div fake--div">
-                                        <span className="chat--race--users--chat--message--div--span--user">User:</span>
-                                        <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
-                                        <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
-                                    </div>
-
-                                    <div className="chat--race--users--chat--message--div fake--div">
-                                        <span className="chat--race--users--chat--message--div--span--user">User:</span>
-                                        <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
-                                        <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
-                                    </div>
+                                    {Array.from(Array(10)).map((elem, ind) => 
+                                    
+                                        <div key ={ind} className="chat--race--users--chat--message--div fake--div">
+                                            <span className="chat--race--users--chat--message--div--span--user">User:</span>
+                                            <span className="chat--race--users--chat--message--div--span--message">Message message message message message message message message message message message message message</span>
+                                            <span className="chat--race--users--chat--message--div--span--datetime">{new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}</span>
+                                        </div>
+                                    
+                                    )}
                                     
                                 </div>
 

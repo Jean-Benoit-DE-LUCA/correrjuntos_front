@@ -10,17 +10,17 @@ export default function Footer() {
             <ul className="footer--ul">
 
                 <div className="footer--ul--anchor--wrap">
-                    <Link className="footer--ul--anchor" href="/legal-notice">
+                    <a className="footer--ul--anchor" href="/legal-notice">
                         <li className="footer--ul--li">Aviso legal</li>
                         <span className="border--bottom--span--hover"></span>
-                    </Link>
+                    </a>
                 </div>
 
                 <div className="footer--ul--anchor--wrap">
-                    <Link className="footer--ul--anchor" href="/privacy">
+                    <a className="footer--ul--anchor" href="/privacy">
                         <li className="footer--ul--li">Aviso de privacidad</li>
                         <span className="border--bottom--span--hover"></span>
-                    </Link>
+                    </a>
                 </div>
 
                 <div className="footer--ul--anchor--wrap">

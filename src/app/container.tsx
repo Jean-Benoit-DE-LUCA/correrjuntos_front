@@ -230,6 +230,9 @@ export default function Container({children,}: {children: React.ReactNode}) {
       const handleLogOut = () => {
     
         sessionStorage.removeItem("lastActivity");
+
+        document.cookie = `user=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
     
         setJwt("");
     
@@ -282,7 +285,7 @@ export default function Container({children,}: {children: React.ReactNode}) {
     
               const lastActivityDateInitial = new Date(sessionStorage.getItem("lastActivity") || "");
     
-              const expireDate = new Date(lastActivityDateInitial.setMilliseconds(1800000));
+              const expireDate = new Date(lastActivityDateInitial.setMilliseconds(7200000));
     
               if (expireDate < new Date()) {
     
@@ -302,6 +305,10 @@ export default function Container({children,}: {children: React.ReactNode}) {
         }
     
       }, [getCount]);
+
+
+
+
     
     
     
@@ -310,6 +317,9 @@ export default function Container({children,}: {children: React.ReactNode}) {
     
         setBackButton(window.location.pathname);
       }, []);
+
+
+      
 
     return (
 

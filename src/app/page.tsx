@@ -129,7 +129,7 @@ export default function App() {
   const fetchLastRaces = async () => {
     const response = await fetch("http://localhost:8080/api/race/getlastraces");
     const responseData = await response.json();
-    console.log(responseData);
+    
 
     const newObj = Object.assign({}, responseData.fetchLastRaces.lastRaces);
     const newObjCount = Object.assign({}, responseData.fetchCountUsersParticipate);
@@ -235,9 +235,7 @@ export default function App() {
       setMessageTrueFalse(false);
     }, 3000);
 
-    if (getLastRaces !== undefined) {
-      console.log(getLastRaces);
-    }
+    
   }, []);
 
 
@@ -251,7 +249,7 @@ export default function App() {
     divUserElement[0].classList.add("active");
   }, []);
 
-console.log(getLastRaces);
+
 
   return (
     <main className="main">
