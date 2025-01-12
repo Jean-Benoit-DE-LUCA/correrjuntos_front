@@ -178,16 +178,29 @@ body {
     right: 7%;
     transform: rotate(15deg);
 }
+
+
 .container--text.five {
-    top: 225rem;
-    left: 13%;
-    transform: rotate(0deg);
-    z-index: 1;
+    top: 0;
+    left: -100%;
+    animation: animText 20s ease-in-out infinite;
 }
 .container--text.six {
-    top: 176rem;
-    right: 19%;
-    transform: rotate(0deg);
+    top: 0;
+    right: -100%;
+    animation: animText 30s ease-in-out infinite;
+}
+
+@keyframes animText {
+    0% {
+        top: 0;
+    }
+    50% {
+        top: 90%;
+    }
+    100% {
+        top: 0;
+    }
 }
 
 .delete--picture {
@@ -3644,10 +3657,10 @@ body {
 @media (min-width: 1200px) {
 
     .container--text.five {
-        left: 16%;
+        left: -150%;
     }
     .container--text.six {
-        right: 24%;
+        right: -150%;
     }
 
     .scroll--animation--left.scroll--animation--active {
@@ -3701,9 +3714,7 @@ body {
 
 @media (min-width: 1350px) {
 
-    .container--text.five {
-        left: 18%;
-    }
+    
 }
 
 

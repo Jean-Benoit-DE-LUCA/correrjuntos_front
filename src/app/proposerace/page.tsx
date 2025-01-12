@@ -337,7 +337,7 @@ export default function ProposeRace() {
                                     </label>
                                     
 
-                                    <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level">
+                                    <select className="main--div--register--form--input--race--level" name="main--div--register--form--input--race--level" id="main--div--register--form--input--race--level">
                                         <option value="bajo">Bajo</option>
                                         <option value="medio">Medio</option>
                                         <option value="alto">Alto</option>

@@ -10,8 +10,8 @@ export default function HomeTextClient() {
             <span className="container--text two">Motivación</span>
             <span className="container--text three">Energía</span>
             <span className="container--text four">Ritmo</span>
-            <span className="container--text five">Entrenamiento</span>
-            <span className="container--text six">Apoyo</span>
+            {/* <span className="container--text five">Entrenamiento</span>
+            <span className="container--text six">Apoyo</span> */}
             </>
             }
         </>

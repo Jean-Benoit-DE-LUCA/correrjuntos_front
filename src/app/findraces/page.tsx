@@ -260,7 +260,7 @@ export default function FindRaces() {
                         <input className="main--div--register--form--input--birthdate--end" type="date" name="main--div--register--form--input--birthdate--end" id="main--div--register--form--input--birthdate--end" />
 
                         <div className="main--div--register--form--input--every--date--wrap">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--every--date">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--every--date--first--checkbox">
                                 ¿Todas?
                             </label>
                             <input className="main--div--register--form--input--every--date" type="checkbox" name="main--div--register--form--input--every--date" id="main--div--register--form--input--every--date--first--checkbox" onChange={handleClickCheckBoxEvery}/>
@@ -305,7 +305,7 @@ export default function FindRaces() {
                         </div>
 
                         <div className="main--div--register--form--input--every--date--wrap">
-                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--every--date">
+                            <label className="main--div--register--form--label" htmlFor="main--div--register--form--input--every--date--second--checkbox">
                                 ¿Todas?
                             </label>
                             <input className="main--div--register--form--input--every--date" type="checkbox" name="main--div--register--form--input--every--date" id="main--div--register--form--input--every--date--second--checkbox" onChange={handleClickCheckBoxEvery}/>

@@ -448,6 +448,8 @@ export default function App() {
       <div className="main--div--picture--wrap">
         <div className="main--div--picture scroll--animation--left">
 
+            <span className="container--text six">Apoyo</span>
+
             <div className="main--div--picture--wrap--img">
                 <Image
                     className="main--div--picture--img"
@@ -471,6 +473,8 @@ export default function App() {
         </div>
 
         <div className="main--div--picture scroll--animation--right">
+
+            <span className="container--text five">Entrenamiento</span>
 
             <div className="main--div--picture--wrap--img">
                 <Image
